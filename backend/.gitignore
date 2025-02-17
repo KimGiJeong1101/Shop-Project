@@ -1,0 +1,11 @@
+# 빌드된 파일들
+/target/
+*.log
+
+# IDE 설정 파일
+.idea/
+.vscode/
+
+# gradle 관련 파일
+.gradle/
+build/
