@@ -9,3 +9,7 @@
 # gradle 관련 파일
 .gradle/
 build/
+
+
+# 업로드
+/upload/
