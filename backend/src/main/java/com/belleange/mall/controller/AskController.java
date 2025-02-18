@@ -20,7 +20,6 @@ public class AskController {
     private final AskService askService;
 
 
-
     @PostMapping(value = "/register", consumes = "application/json")
     public Map<String, Long> register(@RequestBody AskDTO askDTO) {
 

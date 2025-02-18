@@ -18,7 +18,7 @@ public class SearchController {
     private SearchService searchService;
 
     @GetMapping("/api/search/products")
-    public Page<Product> searchProducts(@RequestParam String searchKeyword, Pageable pageable){
+    public Page<Product> searchProducts(@RequestParam String searchKeyword, Pageable pageable) {
         log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + searchKeyword);
         return searchService.searchList(searchKeyword, pageable);
     }

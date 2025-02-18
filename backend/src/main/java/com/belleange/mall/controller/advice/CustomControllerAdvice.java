@@ -16,19 +16,19 @@ import java.util.NoSuchElementException;
 public class CustomControllerAdvice {
 
 
-  @ExceptionHandler(NoSuchElementException.class)
-  protected ResponseEntity<?> notExist(NoSuchElementException e) {
+    @ExceptionHandler(NoSuchElementException.class)
+    protected ResponseEntity<?> notExist(NoSuchElementException e) {
 
-      String msg = e.getMessage();
+        String msg = e.getMessage();
 
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("msg", msg));
-  }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("msg", msg));
+    }
 
-  @ExceptionHandler(MethodArgumentNotValidException.class)
-  protected ResponseEntity<?> handleIllegalArgumentException(MethodArgumentNotValidException e) {
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    protected ResponseEntity<?> handleIllegalArgumentException(MethodArgumentNotValidException e) {
 
-      String msg = e.getMessage();
+        String msg = e.getMessage();
 
-      return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(Map.of("msg", msg));
-  }
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(Map.of("msg", msg));
+    }
 }

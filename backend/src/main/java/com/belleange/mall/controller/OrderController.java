@@ -34,18 +34,16 @@ public class OrderController {
 
     @PostMapping(value = "/api/order")
     public @ResponseBody ResponseEntity order(@RequestBody @Valid OrderDTO orderDTO
-            , BindingResult bindingResult, Principal principal){
+            , BindingResult bindingResult, Principal principal) {
 
-       log.info("OrderDTO : " + orderDTO.getProductPno()+" and" + orderDTO.getCount()); 
-       log.info("=======================================================================");
-       log.info("Delivery Address: {}, Detail Address: {}, Memo: {}, Name: {}, Product PNO: {}, Tel: {}, Count: {}",
-       orderDTO.getDeliveryAddress(), orderDTO.getDetailAddress(), orderDTO.getDmemo(),
-       orderDTO.getDname(), orderDTO.getProductPno(), orderDTO.getTel(), orderDTO.getCount());
-   
-
+        log.info("OrderDTO : " + orderDTO.getProductPno() + " and" + orderDTO.getCount());
+        log.info("=======================================================================");
+        log.info("Delivery Address: {}, Detail Address: {}, Memo: {}, Name: {}, Product PNO: {}, Tel: {}, Count: {}",
+                orderDTO.getDeliveryAddress(), orderDTO.getDetailAddress(), orderDTO.getDmemo(),
+                orderDTO.getDname(), orderDTO.getProductPno(), orderDTO.getTel(), orderDTO.getCount());
 
 
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             StringBuilder sb = new StringBuilder();
             List<FieldError> fieldErrors = bindingResult.getFieldErrors();
 
@@ -61,31 +59,31 @@ public class OrderController {
 
         try {
             orderId = orderService.order(orderDTO, email);
-        } catch(Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<Long>(orderId, HttpStatus.OK);
     }
 
-    @GetMapping(value = {"/api/orders","/orders/{page}"})
+    @GetMapping(value = {"/api/orders", "/orders/{page}"})
     @ResponseBody
-    public ResponseEntity<Page<OrderHistDTO>> orderHist(@PathVariable("page") Optional<Integer> page, Principal principal){
-    
+    public ResponseEntity<Page<OrderHistDTO>> orderHist(@PathVariable("page") Optional<Integer> page, Principal principal) {
+
         Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 4);
         Page<OrderHistDTO> orderHistDTOList = orderService.getOrderList(principal.getName(), pageable);
-    
+
         return ResponseEntity.ok().body(orderHistDTOList);
     }
 
     @PostMapping("/api/order/{orderId}/cancel")
-    public @ResponseBody ResponseEntity cancelOrder(@PathVariable("orderId") Long orderId, Principal principal){
+    public @ResponseBody ResponseEntity cancelOrder(@PathVariable("orderId") Long orderId, Principal principal) {
 
-        if(!orderService.validateOrder(orderId, principal.getName())){
+        if (!orderService.validateOrder(orderId, principal.getName())) {
             return new ResponseEntity<String>("주문 취소를 하실수 없습니다. 관리자에게 문의해주세요",
-            HttpStatus.FORBIDDEN);
+                    HttpStatus.FORBIDDEN);
         }
 
         orderService.cancelOrder(orderId);
-        return new ResponseEntity<Long>(orderId,HttpStatus.OK);
+        return new ResponseEntity<Long>(orderId, HttpStatus.OK);
     }
 }

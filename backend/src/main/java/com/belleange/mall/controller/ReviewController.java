@@ -32,7 +32,7 @@ public class ReviewController {
     public ResponseEntity<List<ReviewDTO>> getReviewList(@PathVariable("pno") Long pno, PageRequestDTO pageRequestDTO) {
         log.info("------------------------ getReviewList ----------------------");
         List<ReviewDTO> reviewDTOList = reviewService.getReviewList(pno, pageRequestDTO);
-        log.info("------------------------ 리스트 확인 ----------------------"+ reviewDTOList.toString());
+        log.info("------------------------ 리스트 확인 ----------------------" + reviewDTOList.toString());
         return ResponseEntity.ok(reviewDTOList);
     }
 
@@ -59,10 +59,10 @@ public class ReviewController {
                                             @RequestBody ReviewDTO reviewDTO) {
         log.info("----------------------- modifyReview ----------------------");
         reviewService.modifyReview(reviewDTO);
-        log.info("---------------- 수정된 정보 ------------------" +reviewDTO.toString());
+        log.info("---------------- 수정된 정보 ------------------" + reviewDTO.toString());
         return Map.of("result", "success");
     }
-    
+
     // 리뷰 삭제
     @DeleteMapping("/remove/{rno}")
     public Map<String, String> deleteReview(@PathVariable(name = "rno") Long rno) {

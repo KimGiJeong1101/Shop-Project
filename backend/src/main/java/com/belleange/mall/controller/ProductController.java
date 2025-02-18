@@ -38,7 +38,7 @@ public class ProductController {
 
     @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     @PostMapping("/")
-    public Map<String, Long> register(ProductDTO productDTO){
+    public Map<String, Long> register(ProductDTO productDTO) {
         log.info("register : " + productDTO);
         List<MultipartFile> files = productDTO.getFiles();
         List<MultipartFile> dfiles = productDTO.getDfiles();
@@ -55,17 +55,17 @@ public class ProductController {
 
         //Service 코딩시작
         Long pno = productService.register(productDTO);
-        try{
+        try {
             Thread.sleep(2000);
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return Map.of("result", pno);
     }
 
     @GetMapping("/list/one")
-    public PageResponseDTO<ProductDTO> listone (PageRequestDTO pageRequestDTO){
-        log.info("listCnoOne............."  + pageRequestDTO);
+    public PageResponseDTO<ProductDTO> listone(PageRequestDTO pageRequestDTO) {
+        log.info("listCnoOne............." + pageRequestDTO);
         // try{
         //   Thread.sleep(1500);
         // }catch(Exception e){
@@ -73,44 +73,47 @@ public class ProductController {
         // }
         return productService.getListCnoOne(pageRequestDTO);
     }
+
     @GetMapping("/list/set")
-    public PageResponseDTO<ProductDTO> listset (PageRequestDTO pageRequestDTO){
-        log.info("listCnoSet............."  + pageRequestDTO);
+    public PageResponseDTO<ProductDTO> listset(PageRequestDTO pageRequestDTO) {
+        log.info("listCnoSet............." + pageRequestDTO);
         // try{
         //   Thread.sleep(1500);
         // }catch(Exception e){
         //   e.printStackTrace();
         // }
-        
+
         return productService.getListCnoSet(pageRequestDTO);
-        
+
     }
+
     @GetMapping("/list/all")
-    public PageResponseDTO<ProductDTO> listAll (PageRequestDTO pageRequestDTO){
-        log.info("listCnoAll............."  + pageRequestDTO);
+    public PageResponseDTO<ProductDTO> listAll(PageRequestDTO pageRequestDTO) {
+        log.info("listCnoAll............." + pageRequestDTO);
         // try{
         //   Thread.sleep(1500);
         // }catch(Exception e){
         //   e.printStackTrace();
         // }
-        
+
         return productService.getListAll(pageRequestDTO);
     }
+
     @GetMapping("/view/{fileName}")
-    public ResponseEntity<Resource> viewFileGet (@PathVariable String fileName){
+    public ResponseEntity<Resource> viewFileGet(@PathVariable String fileName) {
         return fileUtil.getFile(fileName);
     }
 
 
     @GetMapping("/{pno}")
-    public ProductDTO read(@PathVariable(name="pno") Long pno){
+    public ProductDTO read(@PathVariable(name = "pno") Long pno) {
         return productService.get(pno);
     }
 
 
     @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     @PutMapping("/{pno}")
-    public Map<String, String> modify(@PathVariable(name="pno")Long pno, ProductDTO productDTO) {
+    public Map<String, String> modify(@PathVariable(name = "pno") Long pno, ProductDTO productDTO) {
         productDTO.setPno(pno);
         ProductDTO oldProductDTO = productService.get(pno);
         //기존의 파일들 (데이터베이스에 존재하는 파일들 - 수정 과정에서 삭제되었을 수 있음)
@@ -126,25 +129,25 @@ public class ProductController {
         List<String> uploadedFileNames = productDTO.getUploadFileNames();
         List<String> uploadedDfileNames = productDTO.getUploadDfileNames();
         //유지되는 파일들  + 새로 업로드된 파일 이름들이 저장해야 하는 파일 목록이 됨
-        if(currentUploadFileNames != null && currentUploadFileNames.size() > 0) {
+        if (currentUploadFileNames != null && currentUploadFileNames.size() > 0) {
             uploadedFileNames.addAll(currentUploadFileNames);
         }
-        if(currentUploadDfileNames != null && currentUploadDfileNames.size()> 0){
+        if (currentUploadDfileNames != null && currentUploadDfileNames.size() > 0) {
             uploadedDfileNames.addAll(currentUploadDfileNames);
         }
         //서비스 호출 수정작업
         productService.modify(productDTO);
         // 실제 이미지 수정작업 제품이미지
-        if(oldFileNames != null && oldFileNames.size() > 0){
+        if (oldFileNames != null && oldFileNames.size() > 0) {
             //지워야 하는 파일 목록 찾기
             //예전 파일들 중에서 지워져야 하는 파일이름들
-            List<String> removeFiles =  oldFileNames
+            List<String> removeFiles = oldFileNames
                     .stream()
                     .filter(fileName -> uploadedFileNames.indexOf(fileName) == -1).collect(Collectors.toList());
             //실제 파일 삭제
             fileUtil.deleteFiles(removeFiles);
         }//실제 이미지 수정작업2 제품디테일이미지
-        if(oldDfileNames != null && oldDfileNames.size()>0){
+        if (oldDfileNames != null && oldDfileNames.size() > 0) {
             List<String> removeDfiles = oldDfileNames.stream()
                     .filter(dfileName -> uploadedDfileNames.indexOf(dfileName) == -1).collect(Collectors.toList());
             fileUtil.deleteFiles(removeDfiles);
@@ -155,7 +158,7 @@ public class ProductController {
 
     @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     @DeleteMapping("/{pno}")
-    public Map<String, String> remove(@PathVariable("pno") Long pno){
+    public Map<String, String> remove(@PathVariable("pno") Long pno) {
         //삭제해야할 파일들 알아내기
         List<String> oldFileNames = productService.get(pno).getUploadFileNames();
 

@@ -47,28 +47,28 @@ public class EventController {
 
     //업로드 파일 보여주기
     @GetMapping("/view/{fileName}")
-    public ResponseEntity<Resource> viewFileGET(@PathVariable String fileName){ // HTTP 요청 URL의 일부를 매개변수로 바인딩할 때 사용 (fileName)
+    public ResponseEntity<Resource> viewFileGET(@PathVariable String fileName) { // HTTP 요청 URL의 일부를 매개변수로 바인딩할 때 사용 (fileName)
         return fileUtil.getFile(fileName); //
     }
 
 
     //페이징 목록
     @GetMapping("/list")
-    public PageResponseDTO<EventDTO>list(PageRequestDTO pageRequestDTO){
-        log.info("list.........................................."+pageRequestDTO);
-        return  eventService.getList(pageRequestDTO);
+    public PageResponseDTO<EventDTO> list(PageRequestDTO pageRequestDTO) {
+        log.info("list.........................................." + pageRequestDTO);
+        return eventService.getList(pageRequestDTO);
     }
 
     //조회 (상세보기)
     @GetMapping("/{eno}")
-    public EventDTO read(@PathVariable(name="eno") Long eno){
+    public EventDTO read(@PathVariable(name = "eno") Long eno) {
         return eventService.get(eno);
     }
 
     //수정
     @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     @PutMapping("/{eno}")
-    public Map<String, String>modify(@PathVariable(name = "eno") Long eno, EventDTO eventDTO) {
+    public Map<String, String> modify(@PathVariable(name = "eno") Long eno, EventDTO eventDTO) {
         eventDTO.setEno(eno);
         EventDTO oldEventDTO = eventService.get(eno);
 
@@ -96,10 +96,10 @@ public class EventController {
     //삭제
     @PreAuthorize("hasAnyRole('MANAGER','ADMIN')")
     @DeleteMapping("/{eno}")
-    public Map<String, String> remove (@PathVariable ("eno") Long eno){
-        List <String> oldFileNames = eventService.get(eno).getUploadFileNames();
+    public Map<String, String> remove(@PathVariable("eno") Long eno) {
+        List<String> oldFileNames = eventService.get(eno).getUploadFileNames();
         eventService.remove(eno);
         fileUtil.deleteFiles(oldFileNames);
-        return Map.of("RESULT","SUCCESS");
+        return Map.of("RESULT", "SUCCESS");
     }
 }

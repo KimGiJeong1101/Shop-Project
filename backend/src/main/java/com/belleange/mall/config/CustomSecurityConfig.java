@@ -25,7 +25,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
-@Configuration // Bean 사용하려면 있어야함 (사실 @EnableMethodSecurity 이것만 있어도 시큐리티 설정이 가능하지만, Bean을 사용해야 하기 때문에 @EnableMethodSecurity 이것만 쓰는 경우는 드물다.)
+@Configuration
+// Bean 사용하려면 있어야함 (사실 @EnableMethodSecurity 이것만 있어도 시큐리티 설정이 가능하지만, Bean을 사용해야 하기 때문에 @EnableMethodSecurity 이것만 쓰는 경우는 드물다.)
 @Log4j2
 @RequiredArgsConstructor
 @EnableMethodSecurity // 보안 설정 활성화를 위함이다 (시큐리티에서 실질적으로 중요함.)
@@ -40,9 +41,6 @@ import lombok.extern.log4j.Log4j2;
 
 
 public class CustomSecurityConfig {
-
-
-
 
 
     // 따로 보안 설정을 안해주면, 기본적으로는 전부 허용을 안해준다고 한다. 그니깐, 보안이 좋다는 얘기다.
@@ -92,6 +90,7 @@ public class CustomSecurityConfig {
 
         return source;
     }
+
     @Bean // 스프링부트에서 제공하는 암호화 메서드
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
