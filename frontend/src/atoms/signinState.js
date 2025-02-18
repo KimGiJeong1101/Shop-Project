@@ -1,38 +1,36 @@
-import { atom } from "recoil"
-import { getCookie } from "../util/cookieUtil"
-
-
+import { atom } from "recoil";
+import { getCookie } from "../util/cookieUtil";
 
 const initState = {
-    email: '',
-    pw: '',
-    nickname: '',
-    phone: '',
-    birth: '',
-    useraddress: '',
-    detailaddress: '',
-    roleNames: [],
-    social: false,
-    accessToken: '',
-    refreshToken: ''
-}
+  email: "",
+  pw: "",
+  nickname: "",
+  phone: "",
+  birth: "",
+  useraddress: "",
+  detailaddress: "",
+  roleNames: [],
+  social: false,
+  accessToken: "",
+  refreshToken: "",
+};
 
-const loadMemberCookie = () => { //쿠키에서 체크
+const loadMemberCookie = () => {
+  //쿠키에서 체크
 
-    const memberInfo = getCookie("member")
+  const memberInfo = getCookie("member");
 
-    //닉네임 처리
-    if (memberInfo && memberInfo.nickname) {
-        memberInfo.nickname = decodeURIComponent(memberInfo.nickname)
-    }
+  //닉네임 처리
+  if (memberInfo && memberInfo.nickname) {
+    memberInfo.nickname = decodeURIComponent(memberInfo.nickname);
+  }
 
-    return memberInfo
-}
+  return memberInfo;
+};
 
 const signinState = atom({
-    key: 'signinState',
-    default: loadMemberCookie() || initState
-})
-
+  key: "signinState",
+  default: loadMemberCookie() || initState,
+});
 
 export default signinState;

@@ -1,18 +1,17 @@
 import React, { useRef, useState } from "react";
-import { PhotoIcon, XMarkIcon } from '@heroicons/react/24/solid'
+import { PhotoIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { postAdd } from "../../api/eventApi";
 import FetchingModal from "../common/FetchingModal";
 import ResultModal from "../common/ResultModal";
 import useCustomMove from "../../hooks/useCustomMove";
 
 const initState = {
-  title: '',
-  content: '',
-  files: []
-}
+  title: "",
+  content: "",
+  files: [],
+};
 
 const AddComponent = () => {
-
   const [event, setEvent] = useState({ ...initState });
   const uploadRef = useRef();
   const [fetching, setFetching] = useState(false);
@@ -23,24 +22,24 @@ const AddComponent = () => {
   const handleChangeEvent = (e) => {
     setEvent({
       ...event,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
   const handleDrop = (e) => {
     e.preventDefault();
     const droppedFiles = [...e.dataTransfer.files];
-    setEvent(prevState => ({
+    setEvent((prevState) => ({
       ...prevState,
-      files: [...prevState.files, ...droppedFiles]
+      files: [...prevState.files, ...droppedFiles],
     }));
   };
 
   const handleFileSelect = (e) => {
     const selectedFiles = [...e.target.files];
-    setEvent(prevState => ({
+    setEvent((prevState) => ({
       ...prevState,
-      files: [...prevState.files, ...selectedFiles]
+      files: [...prevState.files, ...selectedFiles],
     }));
   };
 
@@ -63,7 +62,7 @@ const AddComponent = () => {
 
     setFetching(true);
 
-    postAdd(formData).then(data => {
+    postAdd(formData).then((data) => {
       setFetching(false);
       setResult(data.result);
     });
@@ -79,7 +78,7 @@ const AddComponent = () => {
     const updatedFiles = event.files.filter((_, i) => i !== index);
     setEvent({
       ...event,
-      files: updatedFiles
+      files: updatedFiles,
     });
   };
 
@@ -87,26 +86,27 @@ const AddComponent = () => {
     <div className="mr-2 ml-2">
       {fetching ? <FetchingModal /> : null}
 
-      {result ?
+      {result ? (
         <ResultModal
-          title={'Event Add Result'}
+          title={"Event Add Result"}
           content={`${result}번 등록 완료`}
           callbackFn={closeModal}
         />
-        : null
-      }
-      
+      ) : null}
 
       <div className="sm:col-span-5 mb-4 ml-5">
-        <label htmlFor="title" className="block text-sm font-bold leading-6 text-gray-900">
+        <label
+          htmlFor="title"
+          className="block text-sm font-bold leading-6 text-gray-900"
+        >
           Title
         </label>
-        <div className="mt-2"> 
+        <div className="mt-2">
           <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-gray-400 sm:max-w-full">
             <input
               className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
               name="title"
-              type={'text'}
+              type={"text"}
               value={event.title}
               placeholder="제목을 입력해주세요"
               onChange={handleChangeEvent}
@@ -115,7 +115,10 @@ const AddComponent = () => {
         </div>
       </div>
       <div className="col-span-full mb-4 ml-5">
-        <label htmlFor="content" className="block text-sm font-bold leading-6 text-gray-900">
+        <label
+          htmlFor="content"
+          className="block text-sm font-bold leading-6 text-gray-900"
+        >
           Content
         </label>
         <div className="mt-2">
@@ -130,7 +133,10 @@ const AddComponent = () => {
         </div>
       </div>
       <div className="col-span-full mb-4 ml-5">
-        <label htmlFor="cover-photo" className="block text-sm font-bold leading-6 text-gray-900">
+        <label
+          htmlFor="cover-photo"
+          className="block text-sm font-bold leading-6 text-gray-900"
+        >
           upload
         </label>
         <div
@@ -139,7 +145,10 @@ const AddComponent = () => {
           onDrop={handleDrop}
         >
           <div className="text-center">
-            <PhotoIcon className="mx-auto h-12 w-12 text-gray-300" aria-hidden="true" />
+            <PhotoIcon
+              className="mx-auto h-12 w-12 text-gray-300"
+              aria-hidden="true"
+            />
             <div className="mt-4 flex text-sm leading-6 text-gray-600">
               <label
                 htmlFor="file-upload"
@@ -150,7 +159,7 @@ const AddComponent = () => {
                   ref={uploadRef}
                   id="file-upload"
                   name="file-upload"
-                  type={'file'}
+                  type={"file"}
                   multiple={true}
                   className="sr-only"
                   onChange={handleFileSelect}
@@ -158,12 +167,17 @@ const AddComponent = () => {
               </label>
               <p className="pl-1">or drag and drop</p>
             </div>
-            <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
+            <p className="text-xs leading-5 text-gray-600">
+              PNG, JPG, GIF up to 10MB
+            </p>
           </div>
         </div>
       </div>
       <div className="col-span-full mb-4 ml-5">
-        <label htmlFor="uploaded-files" className="block text-sm font-bold leading-6 text-gray-900">
+        <label
+          htmlFor="uploaded-files"
+          className="block text-sm font-bold leading-6 text-gray-900"
+        >
           Uploaded Files
         </label>
         <ul className="mt-2">
@@ -175,8 +189,14 @@ const AddComponent = () => {
                 className="w-12 h-12 object-cover rounded-lg mr-2"
               />
               <span className="text-gray-900">{file.name}</span>
-              <button className="ml-2 text-red-500" onClick={() => deleteFile(index)}>
-                <XMarkIcon className="h-6 w-6 text-red-500" aria-hidden="true" />
+              <button
+                className="ml-2 text-red-500"
+                onClick={() => deleteFile(index)}
+              >
+                <XMarkIcon
+                  className="h-6 w-6 text-red-500"
+                  aria-hidden="true"
+                />
               </button>
             </li>
           ))}
@@ -200,6 +220,6 @@ const AddComponent = () => {
       </div>
     </div>
   );
-}
+};
 
 export default AddComponent;

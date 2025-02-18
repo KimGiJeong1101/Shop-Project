@@ -16,14 +16,14 @@ const initState = {
   prevPage: 0,
   nextPage: 0,
   totalPage: 0,
-  current: 0
+  current: 0,
 };
 
 const formatDate = (dateString) => {
   const date = new Date(dateString);
   const year = date.getFullYear();
-  const month = (`0${date.getMonth() + 1}`).slice(-2);
-  const day = (`0${date.getDate()}`).slice(-2);
+  const month = `0${date.getMonth() + 1}`.slice(-2);
+  const day = `0${date.getDate()}`.slice(-2);
 
   return `${year}-${month}-${day}`;
 };
@@ -37,15 +37,19 @@ const ListComponent = () => {
   const userInfo = useRecoilValue(signinState);
 
   useEffect(() => {
-    getList({ page, size }).then(data => {
+    getList({ page, size }).then((data) => {
       setServerData(data);
       setListData(data);
     });
   }, [page, size, refresh]);
 
   const handleClickAsk = (ano) => {
-    const selectPost = serverData.dtoList.find(post => post.ano === ano);
-    if (selectPost && !selectPost.password || userInfo.roleNames.includes('ADMIN') || userInfo.roleNames.includes('MANAGER')) {
+    const selectPost = serverData.dtoList.find((post) => post.ano === ano);
+    if (
+      (selectPost && !selectPost.password) ||
+      userInfo.roleNames.includes("ADMIN") ||
+      userInfo.roleNames.includes("MANAGER")
+    ) {
       moveToRead(ano);
     } else {
       setSelectAno(ano);
@@ -72,7 +76,7 @@ const ListComponent = () => {
       )}
 
       <div className="flex flex-col mx-auto">
-        {serverData.dtoList.map(ask => (
+        {serverData.dtoList.map((ask) => (
           <div key={ask.ano} className="w-full min-w-[400px] my-1">
             <div className="flex flex-col h-full bg-white p-4 border-b-2 border-gray-300">
               <div className="flex items-center justify-between">
@@ -96,7 +100,10 @@ const ListComponent = () => {
           </div>
         ))}
       </div>
-      <PageComponent serverData={serverData} movePage={moveToList}></PageComponent>
+      <PageComponent
+        serverData={serverData}
+        movePage={moveToList}
+      ></PageComponent>
     </div>
   );
 };

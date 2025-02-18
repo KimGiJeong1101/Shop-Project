@@ -15,24 +15,32 @@ class SearchDataList extends React.Component {
           </div>
         ) : (
           <div className="p-16.5 pb-46">
-            {keyWordList && keyWordList.map(data => (
-              <Link to={`/products/read/${data.pno}`} key={data.pno}>
-                <div key={data.pno} className="flex p-6.5 pl-20 items-center border-b border-solid border-gray-300">
-                  <div>
-                    <img 
-                      className="w-30 h-30 rounded-8"
-                      src={data.imageList && data.imageList.length > 0 ? `${host}/api/products/view/${data.imageList[0].fileName}` : '/path/to/default/image.jpg'} 
-                      alt={data.pname || '제품 이미지'} 
-                      width="80" 
-                      height="80"
-                    />
+            {keyWordList &&
+              keyWordList.map((data) => (
+                <Link to={`/products/read/${data.pno}`} key={data.pno}>
+                  <div
+                    key={data.pno}
+                    className="flex p-6.5 pl-20 items-center border-b border-solid border-gray-300"
+                  >
+                    <div>
+                      <img
+                        className="w-30 h-30 rounded-8"
+                        src={
+                          data.imageList && data.imageList.length > 0
+                            ? `${host}/api/products/view/${data.imageList[0].fileName}`
+                            : "/path/to/default/image.jpg"
+                        }
+                        alt={data.pname || "제품 이미지"}
+                        width="80"
+                        height="80"
+                      />
+                    </div>
+                    <div className="ml-4">
+                      <div>{data.pname}</div>
+                    </div>
                   </div>
-                  <div className="ml-4">
-                    <div>{data.pname}</div>
-                  </div>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              ))}
           </div>
         )}
       </div>

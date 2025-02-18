@@ -4,62 +4,55 @@ import FetchingModal from "../common/FetchingModal";
 import { API_SERVER_HOST } from "../../api/productApi";
 import useCustomMove from "../../hooks/useCustomMove";
 import ResultModal from "../common/ResultModal";
-import { PhotoIcon, XMarkIcon } from '@heroicons/react/24/solid'
+import { PhotoIcon, XMarkIcon } from "@heroicons/react/24/solid";
 
 const initState = {
-  eno: '',
-  title: '',
-  content: '',
+  eno: "",
+  title: "",
+  content: "",
   delFlag: false,
   uploadFileNames: [],
+};
 
-}
-
-const host = API_SERVER_HOST
+const host = API_SERVER_HOST;
 
 const ModifyComponent = ({ eno }) => {
-
-  const [event, setEvent] = useState(initState)
+  const [event, setEvent] = useState(initState);
   //결과 모달
-  const [result, setResult] = useState(null)
+  const [result, setResult] = useState(null);
   //이동용 함수
-  const { moveToRead, moveToList } = useCustomMove()
+  const { moveToRead, moveToList } = useCustomMove();
 
-  const [fetching, setFetching] = useState(false)
+  const [fetching, setFetching] = useState(false);
 
-  const uploadRef = useRef()
+  const uploadRef = useRef();
 
   const [showAlert, setShowAlert] = useState(false); // 알림 표시 여부 상태 추가
 
   useEffect(() => {
+    setFetching(true);
 
-    setFetching(true)
-
-    getOne(eno).then(data => {
-
-      setEvent(data)
-      setFetching(false)
-    })
-
-  }, [eno])
+    getOne(eno).then((data) => {
+      setEvent(data);
+      setFetching(false);
+    });
+  }, [eno]);
 
   const handleChangeEvent = (e) => {
+    event[e.target.name] = e.target.value;
 
-    event[e.target.name] = e.target.value
-
-    setEvent({ ...event })
-  }
+    setEvent({ ...event });
+  };
 
   const deleteOldImages = (imageName) => {
+    const resultFileNames = event.uploadFileNames.filter(
+      (fileName) => fileName !== imageName
+    );
 
-    const resultFileNames = event.uploadFileNames.filter(fileName => fileName !== imageName)
+    event.uploadFileNames = resultFileNames;
 
-    event.uploadFileNames = resultFileNames
-
-    setEvent({ ...event })
-  }
-
-
+    setEvent({ ...event });
+  };
 
   // const handleFileChange = (e) => {
   //   const files = Array.from(e.target.files);
@@ -69,7 +62,6 @@ const ModifyComponent = ({ eno }) => {
   //   }));
   // };
 
-
   const handleClickModify = () => {
     // 이미지가 없으면 알림 표시하고 함수 종료
     // if (!uploadRef.current.files || uploadRef.current.files.length === 0) {
@@ -77,74 +69,63 @@ const ModifyComponent = ({ eno }) => {
     //   return;
     // }
 
-    const files = uploadRef.current.files
+    const files = uploadRef.current.files;
 
-    const formData = new FormData()
+    const formData = new FormData();
 
     for (let i = 0; i < files.length; i++) {
       formData.append("files", files[i]);
     }
 
     //other data
-    formData.append("title", event.title)
-    formData.append("content", event.content)
-    formData.append("delFlag", event.delFlag)
+    formData.append("title", event.title);
+    formData.append("content", event.content);
+    formData.append("delFlag", event.delFlag);
 
     for (let i = 0; i < event.uploadFileNames.length; i++) {
-      formData.append("uploadFileNames", event.uploadFileNames[i])
+      formData.append("uploadFileNames", event.uploadFileNames[i]);
     }
     //fetching
-    setFetching(true)
+    setFetching(true);
 
-    putOne(eno, formData).then(data => { //수정 처리
-      setResult('Modified')
-      setFetching(false)
-    })
-
-
-  }
+    putOne(eno, formData).then((data) => {
+      //수정 처리
+      setResult("Modified");
+      setFetching(false);
+    });
+  };
 
   const handleClickDelete = () => {
-
-    setFetching(true)
-    deleteOne(eno).then(data => {
-
-      setResult("Deleted")
-      setFetching(false)
-
-    })
-
-  }
+    setFetching(true);
+    deleteOne(eno).then((data) => {
+      setResult("Deleted");
+      setFetching(false);
+    });
+  };
 
   const closeModal = () => {
-
-    if (result === 'Modified') {
-      moveToRead(eno)
-    } else if (result === 'Deleted') {
-      moveToList({ page: 1 })
+    if (result === "Modified") {
+      moveToRead(eno);
+    } else if (result === "Deleted") {
+      moveToList({ page: 1 });
     }
 
-    setResult(null)
-
-  }
-
-
-
+    setResult(null);
+  };
 
   return (
     <div className="mt-1 mx-8">
       {fetching ? <FetchingModal /> : <></>}
 
-      {result ?
+      {result ? (
         <ResultModal
           title={`${result}`}
-          content={'정상적으로 처리되었습니다.'}  //결과 모달창 
+          content={"정상적으로 처리되었습니다."} //결과 모달창
           callbackFn={closeModal}
         />
-        :
+      ) : (
         <></>
-      }
-
+      )}
 
       {/* <div className="flex justify-center">
       <div className="relative mb-4 flex w-full flex-wrap items-stretch">
@@ -162,30 +143,38 @@ const ModifyComponent = ({ eno }) => {
       <div className="mb-4 ml-5">
         <div className=" grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
           <div className="sm:col-span-4">
-            <label htmlFor="title" className="block text-sm font-bold leading-6 text-gray-900">
+            <label
+              htmlFor="title"
+              className="block text-sm font-bold leading-6 text-gray-900"
+            >
               Title
             </label>
             <div className="mt-2">
-              <input className="block w-full rounded-md border-0 pl-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              <input
+                className="block w-full rounded-md border-0 pl-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 name="title"
-                type={'text'}
+                type={"text"}
                 value={event.title}
                 placeholder="제목을 입력해주세요"
                 onChange={handleChangeEvent}
-              >
-              </input>
+              ></input>
             </div>
           </div>
 
           <div className="sm:col-span-2">
-            <label htmlFor="delete" className="block text-sm font-bold leading-6 text-gray-900">
+            <label
+              htmlFor="delete"
+              className="block text-sm font-bold leading-6 text-gray-900"
+            >
               Delete
             </label>
             <div className="mt-2">
               <select
-                name="delFlag" value={event.delFlag}
+                name="delFlag"
+                value={event.delFlag}
                 onChange={handleChangeEvent}
-                className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              >
                 <option value={false}>사용</option>
                 <option value={true}>삭제</option>
               </select>
@@ -193,7 +182,6 @@ const ModifyComponent = ({ eno }) => {
           </div>
         </div>
       </div>
-
 
       {/* <div className="sm:col-span-4 mb-4 ml-5">
         <label htmlFor="title" className="block text-sm font-bold leading-6 text-gray-900">
@@ -214,7 +202,10 @@ const ModifyComponent = ({ eno }) => {
       </div> */}
 
       <div className="col-span-full mb-4 ml-5">
-        <label htmlFor="content" className="block text-sm font-bold leading-6 text-gray-900">
+        <label
+          htmlFor="content"
+          className="block text-sm font-bold leading-6 text-gray-900"
+        >
           Content
         </label>
         <div className="mt-2">
@@ -224,7 +215,8 @@ const ModifyComponent = ({ eno }) => {
             rows="4"
             placeholder="내용을 입력해주세요"
             onChange={handleChangeEvent}
-            value={event.content}>
+            value={event.content}
+          >
             {event.content}
           </textarea>
         </div>
@@ -291,16 +283,20 @@ const ModifyComponent = ({ eno }) => {
       </div> */}
 
       <div className="col-span-full mb-4 ml-5">
-        <label htmlFor="upload" className="block text-sm font-bold leading-6 text-gray-900">
+        <label
+          htmlFor="upload"
+          className="block text-sm font-bold leading-6 text-gray-900"
+        >
           upload
         </label>
         <div className="mt-1 flex justify-start rounded-lg border border-gray-800/25 px-6 py-4">
           <div className="text-center">
             <div className="flex text-sm leading-6 text-gray-400">
-              <input ref={uploadRef}
+              <input
+                ref={uploadRef}
                 className="justify-start"
-                type={'file'} multiple={true}
-                
+                type={"file"}
+                multiple={true}
               ></input>
             </div>
           </div>
@@ -380,15 +376,17 @@ const ModifyComponent = ({ eno }) => {
         </div>
       </div> */}
 
-
       <div className="col-span-full mb-4 ml-5">
-        <label htmlFor="uploaded-files" className="block text-sm font-bold leading-6 text-gray-900">
+        <label
+          htmlFor="uploaded-files"
+          className="block text-sm font-bold leading-6 text-gray-900"
+        >
           Uploaded Files
         </label>
         <ul className="mt-2">
           {event.uploadFileNames.map((fileName, index) => {
             // UUID와 파일 이름을 공백으로 나누고, 마지막 요소를 파일 이름으로 사용
-            const parts = fileName.split(' ');
+            const parts = fileName.split(" ");
             const originalFileName = parts[parts.length - 1];
             return (
               <li key={index} className="flex items-center">
@@ -398,21 +396,20 @@ const ModifyComponent = ({ eno }) => {
                   className="w-12 h-12 object-cover rounded-lg mr-2"
                 />
                 <span className="text-gray-900">{originalFileName}</span>
-                <button className="ml-2 text-red-500" onClick={() => deleteOldImages(fileName)}>
-                  <XMarkIcon className="h-6 w-6 text-red-500" aria-hidden="true" />
+                <button
+                  className="ml-2 text-red-500"
+                  onClick={() => deleteOldImages(fileName)}
+                >
+                  <XMarkIcon
+                    className="h-6 w-6 text-red-500"
+                    aria-hidden="true"
+                  />
                 </button>
               </li>
             );
           })}
         </ul>
       </div>
-
-
-
-
-
-
-
 
       {/* <div className="col-span-full mb-4 ml-5">
         <div className="mt-2">
@@ -437,8 +434,6 @@ const ModifyComponent = ({ eno }) => {
         </div>
       </div> */}
 
-
-
       {/* 알림 */}
       {showAlert && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mt-4">
@@ -447,9 +442,7 @@ const ModifyComponent = ({ eno }) => {
         </div>
       )}
 
-
       <div className="flex justify-end p-4">
-
         <button
           type="button"
           className="inline-flex items-center border rounded-md bg-gray-50 px-3 py-2 text-sm shadow-sm hover:bg-gray-100"
@@ -495,11 +488,9 @@ const ModifyComponent = ({ eno }) => {
         >
           List
         </button> */}
-
       </div>
-
     </div>
   );
-}
+};
 
 export default ModifyComponent;

@@ -1,15 +1,16 @@
-import axios from "axios"
+import axios from "axios";
 
 //서버 주소
-export const API_SERVER_HOST = 'http://localhost:8081' //API 서버주소 지정 
+export const API_SERVER_HOST = "http://localhost:8081"; //API 서버주소 지정
 //(이 변수가 다른 파일에서도 사용될 수 있도록 모듈로 내보내고 있음)
-const prefix = `${API_SERVER_HOST}/api/todo` //서버주소 뒤에 /api/todo 붙임 
+const prefix = `${API_SERVER_HOST}/api/todo`; //서버주소 뒤에 /api/todo 붙임
 //이렇게 하는 이유는 prefix 변수를 사용하여 API 엔드포인트를 구성할 때 반복을 줄이고 코드의 가독성을 높이기 위해서
 
-export const getOne = async (tno) => {  //sync 키워드는 함수를 비동기 함수로 만듦. 이 키워드를 함수 선언 앞에 추가하면, 함수는 항상 프라미스를 반환,await 키워드를 해당 함수 내에서 사용 할 수 있게 됨
-    const res = await axios.get(`${prefix}/${tno}`) // await 키워드는 프라미스를 기다리는데 사용
-    return res.data
-} //async와 await의 키워드를 통해 비동기임(작업이 동시에 처리 됨)을 알 수 있음 
+export const getOne = async (tno) => {
+  //sync 키워드는 함수를 비동기 함수로 만듦. 이 키워드를 함수 선언 앞에 추가하면, 함수는 항상 프라미스를 반환,await 키워드를 해당 함수 내에서 사용 할 수 있게 됨
+  const res = await axios.get(`${prefix}/${tno}`); // await 키워드는 프라미스를 기다리는데 사용
+  return res.data;
+}; //async와 await의 키워드를 통해 비동기임(작업이 동시에 처리 됨)을 알 수 있음
 
 //프라미스(Promise)는 자바스크립트에서 비동기 작업을 처리하는 객체
 // 1. 대기(pending): 비동기 작업이 아직 완료되지 않은 상태입니다.
@@ -17,30 +18,29 @@ export const getOne = async (tno) => {  //sync 키워드는 함수를 비동기 
 // 3. 거부(rejected): 비동기 작업이 실패한 상태입니다.
 
 export const getList = async (pageParam) => {
-    const { page, size } = pageParam
-    const res = await axios.get(`${prefix}/list`, { params: { page: page, size: size } })
-    return res.data
-}
+  const { page, size } = pageParam;
+  const res = await axios.get(`${prefix}/list`, {
+    params: { page: page, size: size },
+  });
+  return res.data;
+};
 
 ////////////////////////////////////////////////////////////// 아래 복붙
 
 export const postAdd = async (todoObj) => {
-    const res = await axios.post(`${prefix}/` , todoObj)
-    return res.data
-  }
-  
-  
-  export const deleteOne = async (tno) => {
-    const res = await axios.delete(`${prefix}/${tno}` )
-    return res.data
-  
-  }
-  
-  export const putOne = async (todo) => {
-    const res = await axios.put(`${prefix}/${todo.tno}`, todo)
-    return res.data
-  }
-  
+  const res = await axios.post(`${prefix}/`, todoObj);
+  return res.data;
+};
+
+export const deleteOne = async (tno) => {
+  const res = await axios.delete(`${prefix}/${tno}`);
+  return res.data;
+};
+
+export const putOne = async (todo) => {
+  const res = await axios.put(`${prefix}/${todo.tno}`, todo);
+  return res.data;
+};
 
 //   ***따옴표와 백틱의 사용시 차이점***
 // 따옴표와 백틱은 문자열을 표현하는 데 사용되는 서로 다른 기호입니다. 여기에는 몇 가지 차이점이 있습니다

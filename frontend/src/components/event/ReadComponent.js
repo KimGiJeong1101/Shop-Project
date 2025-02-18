@@ -1,21 +1,20 @@
-import { useEffect, useState } from "react"
-import { getOne } from "../../api/eventApi"
-import { API_SERVER_HOST } from "../../api/productApi"
-import useCustomMove from "../../hooks/useCustomMove"
-import FetchingModal from "../common/FetchingModal"
+import { useEffect, useState } from "react";
+import { getOne } from "../../api/eventApi";
+import { API_SERVER_HOST } from "../../api/productApi";
+import useCustomMove from "../../hooks/useCustomMove";
+import FetchingModal from "../common/FetchingModal";
 import { useLocation } from "react-router-dom";
-import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/solid'
-import signinState from "../../atoms/signinState"
-import { useRecoilValue } from "recoil"
-
+import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/solid";
+import signinState from "../../atoms/signinState";
+import { useRecoilValue } from "recoil";
 
 // Define initState within the component
 const initState = {
   eno: 0,
-  title: '',
-  content: '',
-  regdate: '',
-  uploadFileNames: []
+  title: "",
+  content: "",
+  regdate: "",
+  uploadFileNames: [],
 };
 
 const ReadComponent = ({ eno }) => {
@@ -25,7 +24,6 @@ const ReadComponent = ({ eno }) => {
 
   const userInfo = useRecoilValue(signinState);
 
-
   const [fetching, setFetching] = useState(false);
   const host = API_SERVER_HOST;
 
@@ -34,7 +32,7 @@ const ReadComponent = ({ eno }) => {
 
   useEffect(() => {
     setFetching(true);
-    getOne(eno).then(data => {
+    getOne(eno).then((data) => {
       setEvent(data);
       setFetching(false);
     });
@@ -59,8 +57,10 @@ const ReadComponent = ({ eno }) => {
 
   const baseUrl = window.location.origin;
 
-
-  const isAdmin = Array.isArray(userInfo.roleNames) && (userInfo.roleNames.includes('ADMIN') || userInfo.roleNames.includes('MANAGER'));
+  const isAdmin =
+    Array.isArray(userInfo.roleNames) &&
+    (userInfo.roleNames.includes("ADMIN") ||
+      userInfo.roleNames.includes("MANAGER"));
 
   return (
     <div className="mt-1 mr-2 ml-2">
@@ -73,32 +73,32 @@ const ReadComponent = ({ eno }) => {
             <div className="text-xs">작성일 : {formatDate(event.regdate)}</div>
             <div
               className="button-container"
-              onClick={() => handleCopyClipBoard(`${baseUrl}${location.pathname}`)}
-            ><ArrowTopRightOnSquareIcon className="h-4 w-4 ml-8"></ArrowTopRightOnSquareIcon></div>
+              onClick={() =>
+                handleCopyClipBoard(`${baseUrl}${location.pathname}`)
+              }
+            >
+              <ArrowTopRightOnSquareIcon className="h-4 w-4 ml-8"></ArrowTopRightOnSquareIcon>
+            </div>
           </div>
-
         </div>
       </div>
 
-
       <div className="flex justify-center">
-        <div className="w-5/6 p-6 ">
-          {event.content}
-        </div>
+        <div className="w-5/6 p-6 ">{event.content}</div>
       </div>
 
       <div className="w-full justify-center flex  flex-col m-auto items-center">
-        {event.uploadFileNames.map((imgFile, i) =>
+        {event.uploadFileNames.map((imgFile, i) => (
           <img
             alt="event"
             key={i}
             className="p-4 w-1/2"
-            src={`${host}/api/event/view/${imgFile}`} />
-        )}
+            src={`${host}/api/event/view/${imgFile}`}
+          />
+        ))}
       </div>
       <div className="flex justify-center">
-        <div className="w-5/6 p-6 border-b">
-        </div>
+        <div className="w-5/6 p-6 border-b"></div>
       </div>
 
       <div className="flex justify-between p-4 mx-10">
@@ -110,7 +110,6 @@ const ReadComponent = ({ eno }) => {
           목록
         </button>
 
-
         {isAdmin && (
           <button
             type="button"
@@ -119,11 +118,10 @@ const ReadComponent = ({ eno }) => {
           >
             글수정
           </button>
-
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default ReadComponent;

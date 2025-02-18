@@ -1,18 +1,12 @@
 import AddComponent from "../../components/ask/AddComponent";
 
 const AddPage = () => {
+  return (
+    <div className="p-4 w-full bg-white">
+      <div className="text-3xl font-extrabold"></div>
+      <AddComponent></AddComponent>
+    </div>
+  );
+};
 
-
-    return ( 
-      <div className="p-4 w-full bg-white">
-        <div className="text-3xl font-extrabold">
-      
-        </div>
-        <AddComponent></AddComponent>
-      </div> 
-    );
-  
-  }
-   
-  export default AddPage;
-  
+export default AddPage;

@@ -1,20 +1,22 @@
-import {atom, selector} from "recoil";
+import { atom, selector } from "recoil";
 
 export const cartState = atom({
-    key:'cartState',
-    default:[]
-})
+  key: "cartState",
+  default: [],
+});
 
-export const cartTotalState = selector( {
-    key: "cartTotalState",
-    get: ( {get} ) => {
+export const cartTotalState = selector({
+  key: "cartTotalState",
+  get: ({ get }) => {
+    const arr = get(cartState);
 
-        const arr = get(cartState)
+    const initialValue = 0;
 
-        const initialValue = 0
+    const total = arr.reduce(
+      (total, current) => total + current.price * current.count,
+      initialValue
+    );
 
-        const total = arr.reduce((total , current) => total + current.price * current.count , initialValue)
-
-        return total
-    }
-})
+    return total;
+  },
+});

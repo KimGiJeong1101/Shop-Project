@@ -3,20 +3,19 @@ import OrderListComponent from "../../components/order/OrderListComponent";
 import BasicLayout from "../../layouts/BasicLayout";
 
 const OrderListPage = () => {
+  const { orderId } = useParams();
 
-  const {orderId} = useParams()
-
-  return (  
+  return (
     <BasicLayout>
-    <div className="w-full flex justify-center items-center m-0 p-2 border">
-    <div className="p-4 w-full bg-white">
-        <div className="text-3xl font-extrabold">
-        <OrderListComponent orderId={orderId}></OrderListComponent>
+      <div className="w-full flex justify-center items-center m-0 p-2 border">
+        <div className="p-4 w-full bg-white">
+          <div className="text-3xl font-extrabold">
+            <OrderListComponent orderId={orderId}></OrderListComponent>
+          </div>
         </div>
-    </div>
-    </div>
+      </div>
     </BasicLayout>
   );
-}
- 
+};
+
 export default OrderListPage;

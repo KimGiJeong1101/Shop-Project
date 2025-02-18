@@ -1,5 +1,5 @@
 import React from "react";
-import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import SearchDataList from "./SearchDataList";
 import { Link } from "react-router-dom";
 
@@ -12,7 +12,7 @@ class SearchModal extends React.Component {
     };
   }
 
-  keyWordInput = e => {
+  keyWordInput = (e) => {
     const keyword = e.target.value;
     this.setState({
       keyWord: keyword,
@@ -20,21 +20,23 @@ class SearchModal extends React.Component {
     this.filterKeyword(keyword);
   };
 
-  filterKeyword = keyword => {
+  filterKeyword = (keyword) => {
     if (keyword === "") {
       keyword = "나이키";
     }
     // 여기에서 입력값을 URI 인코딩합니다.
     const encodedKeyword = encodeURIComponent(keyword);
-    fetch(`http://localhost:8081/api/search/products?searchKeyword=${encodedKeyword}`)
-      .then(res => res.json())
-      .then(res =>
+    fetch(
+      `http://localhost:8081/api/search/products?searchKeyword=${encodedKeyword}`
+    )
+      .then((res) => res.json())
+      .then((res) =>
         this.setState({
           keyWordList: res.content,
         })
       )
-      .catch(error => {
-        console.error('API 호출 중 오류 발생:', error);
+      .catch((error) => {
+        console.error("API 호출 중 오류 발생:", error);
         // 여기에 사용자에게 에러를 알리는 로직을 추가할 수 있습니다.
       });
   };
@@ -51,10 +53,20 @@ class SearchModal extends React.Component {
             onChange={this.keyWordInput}
             value={this.state.keyWord}
           />
-          <Link to="/"><XMarkIcon className="h-6 w-6 mt-2 ml-3" aria-hidden="true"></XMarkIcon></Link>
+          <Link to="/">
+            <XMarkIcon
+              className="h-6 w-6 mt-2 ml-3"
+              aria-hidden="true"
+            ></XMarkIcon>
+          </Link>
 
           {this.props.modalOn ? (
-            <button className="ml-4 text-sm text-gray-700" onClick={this.props.handleSearchModal}>취소</button>
+            <button
+              className="ml-4 text-sm text-gray-700"
+              onClick={this.props.handleSearchModal}
+            >
+              취소
+            </button>
           ) : null}
         </div>
         {this.state.keyWord ? (
@@ -62,14 +74,20 @@ class SearchModal extends React.Component {
         ) : (
           <div className="bg-white">
             <div className="flex justify-center w-full h-40">
-              {BRANDLIST.map(brand => (
-                <Link to={brand.href} >
-                  <div key={brand.id} className="w-24 h-24 ml-4 cursor-pointer hover:border-white border-2 border-gray-300 rounded-lg">
-                    <img alt={brand.name} src={brand.img} className="w-full h-full rounded-lg" />
+              {BRANDLIST.map((brand) => (
+                <Link to={brand.href}>
+                  <div
+                    key={brand.id}
+                    className="w-24 h-24 ml-4 cursor-pointer hover:border-white border-2 border-gray-300 rounded-lg"
+                  >
+                    <img
+                      alt={brand.name}
+                      src={brand.img}
+                      className="w-full h-full rounded-lg"
+                    />
                     <p className="mt-1 text-xs">{brand.name}</p>
                   </div>
                 </Link>
-
               ))}
             </div>
           </div>
@@ -86,18 +104,18 @@ const BRANDLIST = [
     id: 1,
     name: "All",
     img: "/img/search/all.jpg",
-    href: '/products'
+    href: "/products",
   },
   {
     id: 2,
     name: "Best",
     img: "/img/search/best.png",
-    href: '/products'
+    href: "/products",
   },
   {
     id: 3,
     name: "Set",
     img: "/img/search/set.jpg",
-    href: '/products'
-  }
+    href: "/products",
+  },
 ];

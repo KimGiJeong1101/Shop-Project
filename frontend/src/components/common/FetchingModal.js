@@ -1,11 +1,6 @@
-import {RouletteSpinnerOverlay} from "react-spinner-overlay"
-
+import { RouletteSpinnerOverlay } from "react-spinner-overlay";
 
 const FetchingModal = () => {
-    return (
-
-          <RouletteSpinnerOverlay />
-
-    );
-  };
+  return <RouletteSpinnerOverlay />;
+};
 export default FetchingModal;

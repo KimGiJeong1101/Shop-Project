@@ -4,13 +4,17 @@ import useCustomLogin from "../../hooks/useCustomLogin";
 
 const ListPage = () => {
   const { loginState } = useCustomLogin();
-  const cannotAskAdd = Array.isArray(loginState.roleNames) && loginState.roleNames.length === 0;
+  const cannotAskAdd =
+    Array.isArray(loginState.roleNames) && loginState.roleNames.length === 0;
 
   return (
     <div className="px-4 py-4 w-full bg-white min-w-[1050px]">
       <div className="flex justify-end mb-4 pr-20">
         {!cannotAskAdd && (
-          <Link to="/ask/add" className="inline-flex items-center border rounded-md bg-gray-50 px-4 py-2 text-sm font-medium shadow-sm hover:bg-gray-100 transition duration-300 ease-in-out">
+          <Link
+            to="/ask/add"
+            className="inline-flex items-center border rounded-md bg-gray-50 px-4 py-2 text-sm font-medium shadow-sm hover:bg-gray-100 transition duration-300 ease-in-out"
+          >
             글쓰기
           </Link>
         )}
@@ -29,7 +33,6 @@ const ListPage = () => {
       <ListComponent />
     </div>
   );
-}
+};
 
 export default ListPage;
-

@@ -4,35 +4,32 @@ import { useCallback } from "react";
 import useCustomLogin from "../../hooks/useCustomLogin";
 
 const IndexPage = () => {
-
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleClickList = useCallback(() => {
-    navigate({ pathname: 'list' })
-  })
+    navigate({ pathname: "list" });
+  });
 
   const handleClickAdd = useCallback(() => {
-    navigate({ pathname: 'add' })
-  })
-
+    navigate({ pathname: "add" });
+  });
 
   const { loginState } = useCustomLogin();
 
-
-  const cannotAskAdd = Array.isArray(loginState.roleNames) && loginState.roleNames.length === 0;
-
+  const cannotAskAdd =
+    Array.isArray(loginState.roleNames) && loginState.roleNames.length === 0;
 
   return (
     <BasicLayout>
       <div className="text-3xl flex justify-center font-bold m-3">
         문 의 하 기
       </div>
-    
+
       <div className="flex flex-wrap w-full">
-        <Outlet/>
+        <Outlet />
       </div>
     </BasicLayout>
   );
-}
+};
 
 export default IndexPage;
