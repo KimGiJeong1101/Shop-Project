@@ -19,5 +19,5 @@ public interface EventService {
     void modify(EventDTO eventDTO);
 
     //삭제
-    void remove (Long eno);
+    void remove(Long eno);
 }

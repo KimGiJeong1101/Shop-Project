@@ -1,4 +1,5 @@
 package com.belleange.mall.service;
+
 import com.belleange.mall.domain.Notice;
 import com.belleange.mall.domain.NoticeImage;
 import com.belleange.mall.dto.NoticeDTO;
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
 @Log4j2
 @RequiredArgsConstructor
 @Transactional
-public class NoticeServiceImpl implements NoticeService{
+public class NoticeServiceImpl implements NoticeService {
     private final NoticeRepository noticeRepository;
 
     @Override
@@ -65,17 +66,15 @@ public class NoticeServiceImpl implements NoticeService{
     }
 
 
-
-
     @Override
-    public Long nRegister(NoticeDTO noticeDTO){
+    public Long nRegister(NoticeDTO noticeDTO) {
         Notice notice = dtoToEntity(noticeDTO);
-        log.info("======================"+notice+"=============================");
+        log.info("======================" + notice + "=============================");
         Notice result = noticeRepository.save(notice);
         return result.getNno();
     }
 
-    private  Notice dtoToEntity(NoticeDTO noticeDTO){
+    private Notice dtoToEntity(NoticeDTO noticeDTO) {
         Notice notice = Notice.builder()
                 .nno(noticeDTO.getNno())
                 .ntitle(noticeDTO.getNtitle())
@@ -84,7 +83,7 @@ public class NoticeServiceImpl implements NoticeService{
                 .build();
         List<String> noticeUploadFileNames = noticeDTO.getNoticeUploadFileNames();
 
-        if(noticeUploadFileNames == null){
+        if (noticeUploadFileNames == null) {
             return notice;
         }
 
@@ -96,7 +95,7 @@ public class NoticeServiceImpl implements NoticeService{
     }
 
     @Override
-    public NoticeDTO nGet(Long nno){
+    public NoticeDTO nGet(Long nno) {
         java.util.Optional<Notice> result = noticeRepository.selectOne(nno);
 
         Notice notice = result.orElseThrow();
@@ -106,7 +105,7 @@ public class NoticeServiceImpl implements NoticeService{
         return noticeDTO;
     }
 
-    private NoticeDTO entityToDTO(Notice notice){
+    private NoticeDTO entityToDTO(Notice notice) {
         NoticeDTO noticeDTO = NoticeDTO.builder()
                 .nno(notice.getNno())
                 .ntitle(notice.getNtitle())
@@ -118,7 +117,7 @@ public class NoticeServiceImpl implements NoticeService{
 
         List<NoticeImage> noticeImageList = notice.getNoticeImageList();
 
-        if(noticeImageList == null || noticeImageList.size() == 0 ){
+        if (noticeImageList == null || noticeImageList.size() == 0) {
             return noticeDTO;
         }
 
@@ -131,7 +130,7 @@ public class NoticeServiceImpl implements NoticeService{
     }
 
     @Override
-    public void nModify(NoticeDTO noticeDTO){
+    public void nModify(NoticeDTO noticeDTO) {
 
         //step1 read
         Optional<Notice> result = noticeRepository.findById(noticeDTO.getNno());
@@ -147,7 +146,7 @@ public class NoticeServiceImpl implements NoticeService{
 
         List<String> uploadFileNames = noticeDTO.getNoticeUploadFileNames();
 
-        if(uploadFileNames != null && uploadFileNames.size() > 0 ){
+        if (uploadFileNames != null && uploadFileNames.size() > 0) {
             uploadFileNames.stream().forEach(uploadName -> {
                 notice.addNoticeImageString(uploadName);
             });
@@ -155,8 +154,9 @@ public class NoticeServiceImpl implements NoticeService{
         noticeRepository.save(notice);
 
     }
+
     @Override
-    public void nRemove(Long nno){
+    public void nRemove(Long nno) {
         noticeRepository.updateToDelete(nno, true);
     }
 

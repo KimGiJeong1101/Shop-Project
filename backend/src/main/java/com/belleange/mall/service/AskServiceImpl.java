@@ -34,9 +34,9 @@ public class AskServiceImpl implements AskService {
     public Long register(AskDTO askDTO) {
 
         log.info("...... register1");
-        Ask ask=dtoToAsk(askDTO);
+        Ask ask = dtoToAsk(askDTO);
         log.info("...... register2");
-        Ask result=askRepository.save(ask);
+        Ask result = askRepository.save(ask);
         log.info(result);
         log.info("...... register3");
         return result.getAno();
@@ -44,16 +44,16 @@ public class AskServiceImpl implements AskService {
 
     @Override
     public AskDTO get(Long ano) {
-        Optional<Ask> result=askRepository.findById(ano);
-        Ask ask=result.orElseThrow();
-        AskDTO askDTO=AskTodto(ask);
+        Optional<Ask> result = askRepository.findById(ano);
+        Ask ask = result.orElseThrow();
+        AskDTO askDTO = AskTodto(ask);
         return askDTO;
     }
 
     @Override
     public void modify(AskDTO askDTO) {
-        Optional<Ask> result=askRepository.findById(askDTO.getAno());
-        Ask ask=result.orElseThrow();
+        Optional<Ask> result = askRepository.findById(askDTO.getAno());
+        Ask ask = result.orElseThrow();
         ask.changeTitle(askDTO.getTitle());
         ask.changeText(askDTO.getText());
         askRepository.save(ask);
@@ -67,18 +67,18 @@ public class AskServiceImpl implements AskService {
     @Override
     public PageResponseDTO<AskDTO> askList(PageRequestDTO pageRequestDTO) {
 
-        Pageable pageable= PageRequest.of(
-                pageRequestDTO.getPage()-1,
+        Pageable pageable = PageRequest.of(
+                pageRequestDTO.getPage() - 1,
                 pageRequestDTO.getSize(),
                 Sort.by("ano").descending()
         );
-        Page<Ask> result=askRepository.findAll(pageable);
-        List<AskDTO> dtoList= result.stream()
+        Page<Ask> result = askRepository.findAll(pageable);
+        List<AskDTO> dtoList = result.stream()
                 .map(ask -> AskTodto(ask))
                 .collect(Collectors.toList());
-        long total=result.getTotalElements();
+        long total = result.getTotalElements();
 
-        PageResponseDTO<AskDTO> responseDTO= PageResponseDTO.<AskDTO>withAll()
+        PageResponseDTO<AskDTO> responseDTO = PageResponseDTO.<AskDTO>withAll()
                 .dtoList(dtoList)
                 .pageRequestDTO(pageRequestDTO)
                 .totalCount(total)

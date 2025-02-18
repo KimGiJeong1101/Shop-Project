@@ -112,7 +112,8 @@ public class JWTCheckFilter extends OncePerRequestFilter {
 
         if (path.startsWith("/api/products/list/set/")) {
             return true;
-        }        if (path.startsWith("/api/products/list/all")) {
+        }
+        if (path.startsWith("/api/products/list/all")) {
             return true;
         }
 
@@ -177,7 +178,6 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         if (path.startsWith("/api/notice/view")) {
             return true;
         }
-
 
 
         // Notice관련 토큰 검사 안할거다.end///////////////////////////////////////

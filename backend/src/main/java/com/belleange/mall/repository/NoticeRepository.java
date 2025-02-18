@@ -1,4 +1,5 @@
 package com.belleange.mall.repository;
+
 import com.belleange.mall.domain.Notice;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,9 +19,9 @@ public interface NoticeRepository extends JpaRepository<Notice, Long> {
 
     @Modifying
     @Query("update Notice n set n.ndelFlag = :nflag where n.nno = :nno")
-    void updateToDelete(@Param("nno") Long nno , @Param("nflag") boolean nflag);
+    void updateToDelete(@Param("nno") Long nno, @Param("nflag") boolean nflag);
 
-    @Query ("select n, ni from Notice n left join n.noticeImageList ni where ni.ord = 0 and n.ndelFlag = false ")
+    @Query("select n, ni from Notice n left join n.noticeImageList ni where ni.ord = 0 and n.ndelFlag = false ")
     Page<Object[]> selectList(Pageable pageable);
 
     @EntityGraph(attributePaths = "noticeImageList")

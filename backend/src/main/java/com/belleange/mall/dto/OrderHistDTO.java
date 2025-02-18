@@ -13,8 +13,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class OrderHistDTO {
-    
-    public OrderHistDTO(Order order){
+
+    public OrderHistDTO(Order order) {
         this.orderId = order.getId();
         this.orderDate = order.getOrderDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
         this.orderStatus = order.getOrderStatus();
@@ -24,13 +24,13 @@ public class OrderHistDTO {
         this.tel = order.getTel();
         this.dmemo = order.getDmemo();
         this.totalOrderPrice = order.getTotalOrderPrice();
-        
+
     }
 
     private Long orderId; //주문 아이디
     private String orderDate; //주문 날짜
     private OrderStatus orderStatus; //주문 상태
-    
+
     private String dname;
     private String deliveryAddress;
     private String detailAddress;
@@ -42,7 +42,7 @@ public class OrderHistDTO {
     private List<OrderItemDTO> orderItemDtoList = new ArrayList<>();
 
     //주문 상품리스트
-    public void addOrderItemDto(OrderItemDTO orderItemDTO){
+    public void addOrderItemDto(OrderItemDTO orderItemDTO) {
         orderItemDtoList.add(orderItemDTO);
     }
 }

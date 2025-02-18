@@ -1,4 +1,5 @@
 package com.belleange.mall.domain;
+
 import jakarta.persistence.Embeddable;
 import lombok.*;
 
@@ -12,7 +13,7 @@ public class NoticeImage {
     private String noticeFileName;
     private int ord;
 
-    public void setOrd(int ord){
+    public void setOrd(int ord) {
         this.ord = ord;
     }
 }

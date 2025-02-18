@@ -25,5 +25,5 @@ public interface OrderService {
 
     public Long orders(List<OrderDTO> orderDTOList, String email, CartOrderDTO cartOrderDTO);
 
-    
+
 }

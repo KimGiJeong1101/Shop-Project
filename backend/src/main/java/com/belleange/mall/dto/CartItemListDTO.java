@@ -15,7 +15,7 @@ public class CartItemListDTO {
     private int price;
     private String imageFile;
 
-    public CartItemListDTO(Long cino, int count, Long pno, String pname, int price, String imageFile){
+    public CartItemListDTO(Long cino, int count, Long pno, String pname, int price, String imageFile) {
         this.cino = cino;
         this.count = count;
         this.pno = pno;

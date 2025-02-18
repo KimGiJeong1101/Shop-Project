@@ -110,50 +110,50 @@ public class EventServiceImpl implements EventService {
                 event.addImageString(uploadName);
             });
         }
-                    eventRepository.save(event);
-        }
-
-        @Override
-        public void remove (Long eno){
-            eventRepository.updateToDelete(eno, true);
-        }
-
-        private Event dtoToEntity (EventDTO eventDTO){
-            Event event = Event.builder()
-                    .title(eventDTO.getTitle())
-                    .content(eventDTO.getContent())
-                    .delFlag(eventDTO.isDelFlag())
-                    .build();
-
-            List<String> uploadFileNames = eventDTO.getUploadFileNames();
-
-            if (uploadFileNames != null) {
-                uploadFileNames.forEach(uploadName -> event.addImageString(uploadName));
-            }
-
-            return event;
-        }
-
-        private EventDTO entityToDTO (Event event){
-            EventDTO eventDTO = EventDTO.builder()
-                    .eno(event.getEno())
-                    .title(event.getTitle())
-                    .content(event.getContent())
-                    .regdate(event.getRegDate())
-                    .delFlag(event.isDelFlag())
-                    .build();
-
-            List<EventImages> imageList = event.getImageList();
-
-            if (imageList != null && !imageList.isEmpty()) {
-                List<String> fileNameList = imageList.stream()
-                        .map(EventImages::getFileName)
-                        .toList();
-                eventDTO.setUploadFileNames(fileNameList);
-            }
-
-            return eventDTO;
-        }
-
-
+        eventRepository.save(event);
     }
+
+    @Override
+    public void remove(Long eno) {
+        eventRepository.updateToDelete(eno, true);
+    }
+
+    private Event dtoToEntity(EventDTO eventDTO) {
+        Event event = Event.builder()
+                .title(eventDTO.getTitle())
+                .content(eventDTO.getContent())
+                .delFlag(eventDTO.isDelFlag())
+                .build();
+
+        List<String> uploadFileNames = eventDTO.getUploadFileNames();
+
+        if (uploadFileNames != null) {
+            uploadFileNames.forEach(uploadName -> event.addImageString(uploadName));
+        }
+
+        return event;
+    }
+
+    private EventDTO entityToDTO(Event event) {
+        EventDTO eventDTO = EventDTO.builder()
+                .eno(event.getEno())
+                .title(event.getTitle())
+                .content(event.getContent())
+                .regdate(event.getRegDate())
+                .delFlag(event.isDelFlag())
+                .build();
+
+        List<EventImages> imageList = event.getImageList();
+
+        if (imageList != null && !imageList.isEmpty()) {
+            List<String> fileNameList = imageList.stream()
+                    .map(EventImages::getFileName)
+                    .toList();
+            eventDTO.setUploadFileNames(fileNameList);
+        }
+
+        return eventDTO;
+    }
+
+
+}

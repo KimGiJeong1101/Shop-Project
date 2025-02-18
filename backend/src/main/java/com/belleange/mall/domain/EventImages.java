@@ -14,9 +14,9 @@ import lombok.*;
 public class EventImages {
     private String fileName;
 
-    private  int ord;
+    private int ord;
 
-    public void setOrd(int ord){
-        this.ord=ord;
+    public void setOrd(int ord) {
+        this.ord = ord;
     }
 }

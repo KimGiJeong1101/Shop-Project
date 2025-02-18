@@ -27,7 +27,7 @@ import lombok.ToString;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Product extends BaseEntity{
+public class Product extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,60 +42,72 @@ public class Product extends BaseEntity{
 
     @Enumerated(EnumType.STRING)
     private ProductSellStatus productSellStatus;
-    
+
     @ElementCollection
     @Builder.Default
     private List<ProductImages> imageList = new ArrayList<>(); //제품이미지
 
-    public void changePrice(int price){
+    public void changePrice(int price) {
         this.price = price;
     }
-    public void changePname(String pname){
+
+    public void changePname(String pname) {
         this.pname = pname;
     }
-    public void changePdesc(String pdesc){
+
+    public void changePdesc(String pdesc) {
         this.pdesc = pdesc;
     }
-    public void changeDelFlag(boolean delFlag){
+
+    public void changeDelFlag(boolean delFlag) {
         this.delFlag = delFlag;
     }
-    public void changeCno(int cno){
+
+    public void changeCno(int cno) {
         this.cno = cno;
     }
-    public void changeStockNumber(int stockNumber){
+
+    public void changeStockNumber(int stockNumber) {
         this.stockNumber = stockNumber;
     }
-    public void addImage(ProductImages image){
+
+    public void addImage(ProductImages image) {
         image.setOrd(this.imageList.size());
         imageList.add(image);
     }
-    public void addImageString(String filename){
+
+    public void addImageString(String filename) {
         ProductImages productImage = ProductImages.builder()
                 .fileName(filename)
                 .build();
         addImage(productImage);
     }
-    public void addImageDetail(ProductImages detailImage){
+
+    public void addImageDetail(ProductImages detailImage) {
         detailImage.setOrd(this.imageList.size());
         imageList.add(detailImage);
     }
-    public void addDetailImageString(String dfileName){
+
+    public void addDetailImageString(String dfileName) {
         ProductImages productImage = ProductImages.builder()
                 .dfileName(dfileName)
                 .build();
         addImageDetail(productImage);
     }
-    public void clearList(){
+
+    public void clearList() {
         this.imageList.clear();
     }
-    public void removeStock(int stockNumber){ //재고 줄어들때 OutOfStockException은 만들어써야됨
+
+    public void removeStock(int stockNumber) { //재고 줄어들때 OutOfStockException은 만들어써야됨
         int restStock = this.stockNumber - stockNumber;
-        if(restStock<0){
+        if (restStock < 0) {
             throw new OutOfStockException("상품의 재고가 부족 합니다. (현재 재고 수량: " + this.stockNumber + ")");
         }
         this.stockNumber = restStock;
     }
-    public void addStock(int stockNumber){ //재고 증가할때
+
+    public void addStock(int stockNumber) { //재고 증가할때
         this.stockNumber += stockNumber;
     }
 }

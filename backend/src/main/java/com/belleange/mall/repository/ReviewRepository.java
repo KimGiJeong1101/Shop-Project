@@ -20,7 +20,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 //    List<Review> findByProduct(Product product);
 
     @Query("select r from Review r Join fetch r.product p Join fetch r.member m where p.pno=:pno")
-    Page<Review>findByProduct(@Param("pno") Long pno,Pageable pageable);
+    Page<Review> findByProduct(@Param("pno") Long pno, Pageable pageable);
 
     @Modifying
     @Query("delete from Review pr where pr.member=:member")

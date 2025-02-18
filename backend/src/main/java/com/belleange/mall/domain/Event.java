@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name="board_event")
+@Table(name = "board_event")
 @Getter
 @ToString(exclude = "imageList")
 @Builder
@@ -31,19 +31,19 @@ public class Event extends BaseEntity {
     @ElementCollection
     //엔티티 클래스 내에 컬렉션(예: List, Set, Map 등)을 저장할 때 사용
     @Builder.Default//빌더 패턴을 사용할 때 기본값을 설정하는 데 사용
-    private List<EventImages> imageList=new ArrayList<>();
+    private List<EventImages> imageList = new ArrayList<>();
 
 
-    public void changeTitle(String title){
-        this.title=title;
+    public void changeTitle(String title) {
+        this.title = title;
     }
 
-    public void changeContent(String content){
-        this.content= content;
+    public void changeContent(String content) {
+        this.content = content;
     }
 
-    public void changeDel(boolean delFlag){
-        this.delFlag=delFlag;
+    public void changeDel(boolean delFlag) {
+        this.delFlag = delFlag;
     }
 
 
@@ -53,7 +53,7 @@ public class Event extends BaseEntity {
         imageList.add(image);
     }
 
-    public void addImageString(String fileName){
+    public void addImageString(String fileName) {
 
         EventImages eventImages = EventImages.builder()
                 .fileName(fileName)

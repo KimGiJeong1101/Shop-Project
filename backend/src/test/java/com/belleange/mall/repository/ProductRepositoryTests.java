@@ -26,30 +26,31 @@ public class ProductRepositoryTests {
     ProductRepository productRepository;
 
     @Test
-    public void testInsert(){
+    public void testInsert() {
 
-        for(int i = 0;i<20;i++){
+        for (int i = 0; i < 20; i++) {
             Product product = Product.builder()
-            .pname("상품" + i)
-            .price(100*i)
-            .pdesc("상품설명" + i)
-            .cno(1)
-            .stockNumber(10000)
-            .productSellStatus(ProductSellStatus.SELL)
-            .build();
+                    .pname("상품" + i)
+                    .price(100 * i)
+                    .pdesc("상품설명" + i)
+                    .cno(1)
+                    .stockNumber(10000)
+                    .productSellStatus(ProductSellStatus.SELL)
+                    .build();
 
             product.addImageString("IMAGE1.jpg");
             product.addImageString("IMAGE2.jpg");
             product.addDetailImageString("IMAGEDETAIL1.jpg");
-            
+
             productRepository.save(product);
             log.info("----------------------------------------------");
 
         }
     }
+
     @Transactional
     @Test
-    public void testRead(){
+    public void testRead() {
         Long pno = 1L;
         Optional<Product> result = productRepository.findById(pno);
         Product product = result.orElseThrow();
@@ -57,22 +58,25 @@ public class ProductRepositoryTests {
         log.info(product);
         log.info(product.getImageList());
     }
+
     @Test
-    public void testRead2(){
+    public void testRead2() {
         Long pno = 1L;
         Optional<Product> result = productRepository.selectOne(pno);
         Product product = result.orElseThrow();
         log.info(product);
     }
+
     @Commit
     @Transactional
     @Test
-    public void testDelete(){
+    public void testDelete() {
         Long pno = 9L;
         productRepository.updateToDelete(pno, true);
     }
+
     @Test
-    public void testUpdate(){
+    public void testUpdate() {
         Long pno = 10L;
         Product product = productRepository.selectOne(pno).get();
         product.changePname("10번상품이에요");
@@ -81,50 +85,52 @@ public class ProductRepositoryTests {
         product.changeCno(3);
 
         product.clearList();
-        product.addImageString(UUID.randomUUID().toString()+"_"+"NEWIMAGE1.jpg");
-        product.addImageString(UUID.randomUUID().toString()+"_"+"NEWIMAGE2.jpg");
-        product.addImageString(UUID.randomUUID().toString()+"_"+"NEWIMAGE3.jpg");
-        product.addDetailImageString(UUID.randomUUID().toString()+"_"+"DETAILIMAGE1.jpg");
-        product.addDetailImageString(UUID.randomUUID().toString()+"_"+"DETAILIMAGE2.jpg");
-        product.addDetailImageString(UUID.randomUUID().toString()+"_"+"DETAILIMAGE3.jpg");
+        product.addImageString(UUID.randomUUID().toString() + "_" + "NEWIMAGE1.jpg");
+        product.addImageString(UUID.randomUUID().toString() + "_" + "NEWIMAGE2.jpg");
+        product.addImageString(UUID.randomUUID().toString() + "_" + "NEWIMAGE3.jpg");
+        product.addDetailImageString(UUID.randomUUID().toString() + "_" + "DETAILIMAGE1.jpg");
+        product.addDetailImageString(UUID.randomUUID().toString() + "_" + "DETAILIMAGE2.jpg");
+        product.addDetailImageString(UUID.randomUUID().toString() + "_" + "DETAILIMAGE3.jpg");
         productRepository.save(product);
     }
-      @Test
-        public void testList() {
 
-            //org.springframework.data.domain 패키지
-            Pageable pageable = PageRequest.of(0, 10, Sort.by("pno").descending());
-            Page<Object[]> result = productRepository.selectListcno1(pageable);
-            //java.util
-            result.getContent().forEach(arr -> log.info(Arrays.toString(arr)));
-  }
-  @Test
-  public void testList2() {
+    @Test
+    public void testList() {
 
-      //org.springframework.data.domain 패키지
-      Pageable pageable = PageRequest.of(0, 10, Sort.by("pno").descending());
-      Page<Object[]> result = productRepository.selectListcno2(pageable);
-      //java.util
-      result.getContent().forEach(arr -> log.info(Arrays.toString(arr)));
-}
+        //org.springframework.data.domain 패키지
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("pno").descending());
+        Page<Object[]> result = productRepository.selectListcno1(pageable);
+        //java.util
+        result.getContent().forEach(arr -> log.info(Arrays.toString(arr)));
+    }
 
-  @Transactional
-  @Test
-  public void testListWithAll() {
+    @Test
+    public void testList2() {
 
-    //org.springframework.data.domain 패키지
-    Pageable pageable = PageRequest.of(0, 10, Sort.by("pno").descending());
+        //org.springframework.data.domain 패키지
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("pno").descending());
+        Page<Object[]> result = productRepository.selectListcno2(pageable);
+        //java.util
+        result.getContent().forEach(arr -> log.info(Arrays.toString(arr)));
+    }
 
-    Page<Product> result = productRepository.selectListWitAll(pageable);
+    @Transactional
+    @Test
+    public void testListWithAll() {
 
-    //java.util
-    result.getContent().forEach(product ->{
+        //org.springframework.data.domain 패키지
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("pno").descending());
 
-      log.info(product);
-      log.info(product.getImageList());
+        Page<Product> result = productRepository.selectListWitAll(pageable);
 
-    });
+        //java.util
+        result.getContent().forEach(product -> {
 
-  }
+            log.info(product);
+            log.info(product.getImageList());
+
+        });
+
+    }
 }
 

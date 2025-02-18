@@ -15,7 +15,8 @@ import java.time.LocalDate;
 @Table(name = "board_ask")
 public class Ask extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) // 시퀀스 생성
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // 시퀀스 생성
     private Long ano; // 질문 게시글 번호
     private String title; // 제목
     private String text; // 내용 // 수정가능
@@ -28,15 +29,14 @@ public class Ask extends BaseEntity {
     private Member writer;
 
 
-
 //    @Column(columnDefinition = "integer default 0", nullable = false) // 조회수 기본값을 숫자0. null 불가
 //    private int view; // 조회수를 db에서 처리 하기 위해 엔티티에 필드 생성
 
-    public void changeText(String text){
+    public void changeText(String text) {
         this.text = text;
     }
 
-    public void changeTitle(String title){
+    public void changeTitle(String title) {
         this.title = title;
     }
 }

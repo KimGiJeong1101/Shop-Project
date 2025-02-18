@@ -35,7 +35,7 @@ import lombok.extern.log4j.Log4j2;
 @Transactional
 @RequiredArgsConstructor
 @Log4j2
-public class OrderServiceImpl implements OrderService{
+public class OrderServiceImpl implements OrderService {
     @Autowired
     private ProductRepository productRepository;
     @Autowired
@@ -46,12 +46,12 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     public Long order(OrderDTO orderDTO, String email) {
-        
+
         Product product = productRepository.findById(orderDTO.getProductPno())
-                    .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(EntityNotFoundException::new);
 
         Member member = memberRepository.findByEmail(email);
-        
+
         List<OrderItem> orderItemList = new ArrayList<>();
         log.info("여기까지도착00000");
         OrderItem orderItem = OrderItem.createOrderProduct(product, orderDTO.getCount());
@@ -63,9 +63,10 @@ public class OrderServiceImpl implements OrderService{
         orderRepository.save(order);
         return order.getId();
     }
+
     @Override
-    public Long orders(List<OrderDTO> orderDTOList, String email,CartOrderDTO cartOrderDTO) {
-        
+    public Long orders(List<OrderDTO> orderDTOList, String email, CartOrderDTO cartOrderDTO) {
+
         log.info("====================================================");
         log.info("====================================================");
         log.info(cartOrderDTO.getDmemo());
@@ -73,64 +74,64 @@ public class OrderServiceImpl implements OrderService{
         Member member = memberRepository.findByEmail(email);
         List<OrderItem> orderItemList = new ArrayList<>();
 
-        for(OrderDTO orderDTO : orderDTOList){
+        for (OrderDTO orderDTO : orderDTOList) {
 
             Product product = productRepository.findById(orderDTO.getProductPno())
-                            .orElseThrow(EntityNotFoundException::new);
-            OrderItem orderItem  = OrderItem.createOrderProduct(product, orderDTO.getCount());
+                    .orElseThrow(EntityNotFoundException::new);
+            OrderItem orderItem = OrderItem.createOrderProduct(product, orderDTO.getCount());
             orderItemList.add(orderItem);
         }
-        
+
         Order order = Order.createOrder(member, orderItemList, cartOrderDTO);
         orderRepository.save(order);
 
         return order.getId();
     }
+
     @Override
     public Page<OrderHistDTO> getOrderList(String email, Pageable pageable) {
         //파라미터로 email과 pageable를 받음
-        List<Order> orders = orderRepository.findOrders(email, pageable); 
+        List<Order> orders = orderRepository.findOrders(email, pageable);
         Long totalCount = orderRepository.countOrder(email);
 
         List<OrderHistDTO> orderHistDTOs = new ArrayList<>();
 
-        for(Order order : orders){
+        for (Order order : orders) {
             OrderHistDTO orderHistDTO = new OrderHistDTO(order);
             List<OrderItem> orderItems = order.getOrderItems();
-            for(OrderItem orderItem : orderItems){
+            for (OrderItem orderItem : orderItems) {
                 ProductImages productImages = productRepository.selectOrderImg(orderItem.getProduct().getPno());
-                OrderItemDTO orderItemDTO = 
-                                    new OrderItemDTO(orderItem, productImages.getFileName());
-                orderHistDTO.addOrderItemDto(orderItemDTO);                
+                OrderItemDTO orderItemDTO =
+                        new OrderItemDTO(orderItem, productImages.getFileName());
+                orderHistDTO.addOrderItemDto(orderItemDTO);
             }
             orderHistDTOs.add(orderHistDTO);
         }
-        return new PageImpl<OrderHistDTO>(orderHistDTOs,pageable,totalCount);
+        return new PageImpl<OrderHistDTO>(orderHistDTOs, pageable, totalCount);
     }
+
     @Override
     public boolean validateOrder(Long orderId, String email) {
 
         Member curMember = memberRepository.findByEmail(email);
         Order order = orderRepository.findById(orderId)
-                        .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(EntityNotFoundException::new);
         Member savedMember = order.getMember();
 
-        if(!curMember.getEmail().equals(savedMember.getEmail())){
+        if (!curMember.getEmail().equals(savedMember.getEmail())) {
             return false;
         }
         // 주문이 유효한 경우 true를 반환합니다.
         return true;
     }
+
     @Override
     public void cancelOrder(Long orderId) {
         Order order = orderRepository.findById(orderId)
-                    .orElseThrow(EntityNotFoundException::new);
-        
+                .orElseThrow(EntityNotFoundException::new);
+
         order.cancelOrder();
     }
-
-    
-
 
 
 }

@@ -10,15 +10,19 @@ import java.util.List;
 
 
 public interface ReviewService {
-    
+
     // 리뷰 목록
-    List<ReviewDTO> getReviewList(Long pno,PageRequestDTO pageRequestDTO);
+    List<ReviewDTO> getReviewList(Long pno, PageRequestDTO pageRequestDTO);
+
     // 리뷰 작성
     Long addReview(ReviewDTO reviewDTO);
+
     // 리뷰 상세
     ReviewDTO getReview(Long rno);
+
     // 리뷰 수정
     void modifyReview(ReviewDTO reviewDTO);
+
     // 리뷰 삭제
     void deleteReview(Long rno);
 

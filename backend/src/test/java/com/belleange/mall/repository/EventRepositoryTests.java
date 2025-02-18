@@ -87,7 +87,7 @@ public class EventRepositoryTests {
     }
 
     @Test
-    public void testUpdate(){
+    public void testUpdate() {
 
         Long eno = 10L;
 

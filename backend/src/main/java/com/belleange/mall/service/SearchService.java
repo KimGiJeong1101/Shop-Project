@@ -5,5 +5,5 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface SearchService {
-    Page<Product>  searchList(String searchKeyword, Pageable pageable);
+    Page<Product> searchList(String searchKeyword, Pageable pageable);
 }

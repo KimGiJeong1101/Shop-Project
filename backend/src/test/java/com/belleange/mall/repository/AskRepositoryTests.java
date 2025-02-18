@@ -19,10 +19,10 @@ public class AskRepositoryTests {
         for (int i = 1; i <= 10; i++) {
 
             Member member = Member.builder().email("user" + i + "@aaa.com").build();
-            String password=null;
+            String password = null;
             Ask ask = Ask.builder()
                     .title("Title..." + i)
-                    .text("Content...."+i)
+                    .text("Content...." + i)
                     .writer(member)
                     .password(password)
                     .build();

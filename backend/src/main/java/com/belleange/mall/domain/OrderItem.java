@@ -10,11 +10,12 @@ import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
+
 @Entity
 @Getter
 @Setter
 @Log4j2
-public class OrderItem extends BaseEntity{
+public class OrderItem extends BaseEntity {
 
     @Id
     @GeneratedValue
@@ -33,14 +34,14 @@ public class OrderItem extends BaseEntity{
 
     private int count; // 주문 수량
 
-    public static OrderItem createOrderProduct(Product product, int count){
+    public static OrderItem createOrderProduct(Product product, int count) {
         log.info("OrderItem : " + product);
-        log.info("OrderItem : " + count); 
-    
+        log.info("OrderItem : " + count);
+
         if (product.getStockNumber() < count) { // 재고가 주문 수량보다 작으면
             throw new IllegalStateException("재고가 부족합니다."); // 예외를 던져서 처리
         }
-    
+
         OrderItem orderItem = new OrderItem(); // 새 OrderItem 객체 생성
         orderItem.setProduct(product); // 제품 설정
         orderItem.setCount(count); // 수량 설정
@@ -48,13 +49,13 @@ public class OrderItem extends BaseEntity{
         product.removeStock(count); // 주문 수량만큼 제품의 재고를 감소
         return orderItem; // 생성된 OrderItem 객체 반환
     }
-    
 
-    public int getTotalPrice(){
+
+    public int getTotalPrice() {
         return orderPrice * count; // 주문 총 가격을 계산하여 반환
     }
 
-    public void cancel(){
+    public void cancel() {
         this.getProduct().addStock(count); // 주문 취소 시, 제품의 재고를 다시 증가시킴
     }
 

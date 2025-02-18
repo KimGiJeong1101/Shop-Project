@@ -15,7 +15,7 @@ public class Delivery {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long delId;
 
-    private String delAddress; 
+    private String delAddress;
 
     private String delStatus; // 배송 상태
 

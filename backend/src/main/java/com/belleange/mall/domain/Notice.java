@@ -42,31 +42,31 @@ public class Notice extends BaseEntity {
     @Builder.Default
     private List<NoticeImage> noticeImageList = new ArrayList<>();
 
-    public void changentitle(String ntitle){
+    public void changentitle(String ntitle) {
         this.ntitle = ntitle;
     }
 
-    public void changenwriter(String nwriter){
+    public void changenwriter(String nwriter) {
         this.nwriter = nwriter;
     }
 
-    public void changencontent(String ncontent){
+    public void changencontent(String ncontent) {
         this.ncontent = ncontent;
     }
 
-    public void addNimage(NoticeImage nimage){
+    public void addNimage(NoticeImage nimage) {
         nimage.setOrd(this.noticeImageList.size());
         noticeImageList.add(nimage);
     }
 
-    public void addNoticeImageString(String noticeFileName){
+    public void addNoticeImageString(String noticeFileName) {
         NoticeImage noticeImage = NoticeImage.builder()
                 .noticeFileName(noticeFileName)
                 .build();
         addNimage(noticeImage);
     }
 
-    public void nClearList(){
+    public void nClearList() {
         this.noticeImageList.clear();
     }
 

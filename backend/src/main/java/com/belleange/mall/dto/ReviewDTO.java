@@ -19,7 +19,7 @@ public class ReviewDTO {
     private Long rno; // 리뷰 엔티티의 pk
     private String reviewContent; // 댓글
     private int grade; // 별점
-    private LocalDateTime regdate,modDate; // 댓글 단 날짜와 수정날짜
+    private LocalDateTime regdate, modDate; // 댓글 단 날짜와 수정날짜
     private Long pno;// 상품 pk
     private String email; // 멤버의 pk
     private String nickname; // 닉네임 보이게 할거
