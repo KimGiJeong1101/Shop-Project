@@ -16,8 +16,6 @@ const refreshJWT = async (accessToken, refreshToken) => {
     header
   );
 
-  console.log("----------------------");
-  console.log(res.data);
 
   return res.data;
 };
@@ -51,8 +49,7 @@ const requestFail = (err) => {
 
 // 응답 전에 실행되는 함수입니다.
 const beforeRes = async (res) => {
-  console.log("before return response............."); // 응답 전 메시지를 콘솔에 출력합니다.
-  console.log(res); // 응답 데이터를 콘솔에 출력합니다.
+  
   const data = res.data; // 응답 데이터를 저장합니다.
 
   if (data && data.error === "ERROR_ACCESS_TOKEN") {

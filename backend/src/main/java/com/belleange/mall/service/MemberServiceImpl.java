@@ -6,6 +6,7 @@ import com.belleange.mall.domain.MemberRole;
 import com.belleange.mall.dto.MemberDTO;
 import com.belleange.mall.dto.MemberModifyDTO;
 import com.belleange.mall.repository.MemberRepository;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpEntity;
@@ -19,6 +20,7 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 
+import java.io.PrintWriter;
 import java.util.LinkedHashMap;
 import java.util.Optional;
 
@@ -30,13 +32,12 @@ import java.util.Optional;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
-
     private final PasswordEncoder passwordEncoder;
 
     @Override
     public String join(MemberDTO memberDTO) {
         Member member = dtoToEntity(memberDTO);
-        log.info("==============서비스임플입니다 지나가는지 테스트중 11111111111111111111111111==========");
+
         Member result = memberRepository.save(member);
         log.info("==============서비스임플입니다 지나가는지 테스트중 22222222222222222==========");
         return result.getEmail();
@@ -44,24 +45,27 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public MemberDTO getKakaoMember(String accessToken) {
-
-        log.info("==================ddd===============");
+        // 카카오 액세스 토큰으로 이메일을 가져옴
         String email = getEmailFromKakaoAccessToken(accessToken);
-        log.info("-------------gggggggg----------------------");
-        log.info("email: " + email);
 
+        // 해당 이메일로 기존 회원을 찾아봄
         Optional<Member> result = memberRepository.findById(email);
 
+
         if (result.isPresent()) {
-            MemberDTO memberDTO = entityToDTO(result.get());
+            // 이미 회원이 있으면 해당 정보를 반환
+            return entityToDTO(result.get());
         }
+
+        // 기존 회원이 없으면 새로운 회원을 만들어서 저장
         Member socialMember = makeSocialMember(email);
         memberRepository.save(socialMember);
 
-        MemberDTO memberDTO = entityToDTO(socialMember);
 
-        return memberDTO;
+        // 새로 생성된 회원의 정보를 반환
+        return entityToDTO(socialMember);
     }
+
 
     @Override
     public void modifyMember(MemberModifyDTO memberModifyDTO) {
@@ -70,9 +74,7 @@ public class MemberServiceImpl implements MemberService {
 
         Member member = result.orElseThrow();
 
-
         member.changePw(passwordEncoder.encode(memberModifyDTO.getPw()));
-        member.changeSocial(false);
         member.changeNickname(memberModifyDTO.getNickname());
         member.changePhone(memberModifyDTO.getPhone());
         member.changeBirth(memberModifyDTO.getBirth());
@@ -109,24 +111,10 @@ public class MemberServiceImpl implements MemberService {
         headers.add("Content-Type", "application/x-www-form-urlencoded");
 
         HttpEntity<String> entity = new HttpEntity<>(headers);
-
         UriComponents uriBuilder = UriComponentsBuilder.fromHttpUrl(kakaoGetUserURL).build();
-        log.info("=========4444444444=======================");
-        log.info("--------------uri----------------" + uriBuilder);
-        log.info("-------------entity--------------" + entity);
-
         ResponseEntity<LinkedHashMap> response = restTemplate.exchange(uriBuilder.toString(), HttpMethod.GET, entity, LinkedHashMap.class);
-
-        log.info("-------------response-----------" + response);
-        log.info("=========55555555555555555=======================");
         LinkedHashMap<String, LinkedHashMap> bodyMap = response.getBody();
-
-        log.info("=================================");
-        log.info(bodyMap);
-
         LinkedHashMap<String, String> kakaoAccount = bodyMap.get("kakao_account");
-
-        log.info("kakaoAccount:" + kakaoAccount);
 
         return kakaoAccount.get("email");
     }
@@ -147,14 +135,10 @@ public class MemberServiceImpl implements MemberService {
 
         String tempPassword = makeTempPassword();
 
-        log.info("=====tempPassword========" + tempPassword);
-
-        String nickname = "소셜회원";
 
         Member member = Member.builder()
                 .email(email)
                 .pw(passwordEncoder.encode(tempPassword))
-                .nickname(nickname)
                 .social(true)
                 .build();
 
@@ -162,6 +146,15 @@ public class MemberServiceImpl implements MemberService {
 
         return member;
     }
+
+
+    // 필수 정보가 누락된 경우 체크
+    private boolean isRequiredFieldsMissing(MemberDTO memberDTO) {
+        return memberDTO.getEmail() == null || memberDTO.getEmail().isEmpty() ||
+                memberDTO.getRoleNames() == null || memberDTO.getRoleNames().isEmpty() ||
+                memberDTO.getNickname() == null || memberDTO.getNickname().isEmpty();
+    }
+
 
     private Member dtoToEntity(MemberDTO memberDTO) {
         Member member = Member.builder()

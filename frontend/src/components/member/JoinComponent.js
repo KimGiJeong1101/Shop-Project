@@ -88,8 +88,8 @@ const JoinComponent = () => {
     if (!joinParam.phone.startsWith("01")) {
       alert("올바른 전화번호를 입력해주세요.");
       return;
-    } else if (joinParam.phone.length < 10) {
-      alert("전화번호는 10자리 이상이어야 합니다");
+    } else if (joinParam.phone.length < 10 || joinParam.phone.length > 11) {
+      alert("전화번호는 10~11자리 숫자로 입력해주세요.");
       return;
     } else if (!/^\d+$/.test(joinParam.phone)) {
       alert('전화번호는 숫자만 입력해야 하며, "-"는 포함하지 않습니다.');
@@ -363,110 +363,6 @@ const JoinComponent = () => {
           </p>
         </form>
       </div>
-
-      {/* <div className="border-2 border-sky-200 mt-10 m-2 p-4">
-                <div className="flex justify-center">
-                    <div className="text-4xl m-4 p-4 font-extrabold text-blue-500">Join Component</div>
-                </div>
-                <div className="flex justify-center">
-                    <div className="relative mb-4 flex w-full flex-wrap items-stretch">
-                        <div className="w-full p-3 text-left font-bold">EMAIL</div>
-                        <input
-                            name="email"
-                            type="text"
-                            className="w-full p-3 rounded-r border border-solid border-neutral-500 shadow-md"
-                            onChange={handleChangeJoin}
-                        />
-                    </div>
-                </div>
-                <div className="flex justify-center">
-                    <div className="relative mb-4 flex w-full flex-wrap items-stretch">
-                        <div className="w-full p-3 text-left font-bold">PASSWORD</div>
-                        <input
-                            name="pw"
-                            type="password"
-                            className="w-full p-3 rounded-r border border-solid border-neutral-500 shadow-md"
-                            onChange={handleChangeJoin}
-                        />
-                    </div>
-                </div>
-                <div className="flex justify-center">
-                    <div className="relative mb-4 flex w-full flex-wrap items-stretch">
-                        <div className="w-full p-3 text-left font-bold">NICKNAME</div>
-                        <input
-                            name="nickname"
-                            type="text"
-                            className="w-full p-3 rounded-r border border-solid border-neutral-500 shadow-md"
-                            onChange={handleChangeJoin}
-                        />
-                    </div>
-                </div>
-                <div className="flex justify-center">
-                    <div className="relative mb-4 flex w-full flex-wrap items-stretch">
-                        <div className="w-full p-3 text-left font-bold">PHONE</div>
-                        <input
-                            name="phone"
-                            type="text"
-                            className="w-full p-3 rounded-r border border-solid border-neutral-500 shadow-md"
-                            onChange={handleChangeJoin}
-                        />
-                    </div>
-                </div>
-                <div className="flex justify-center">
-                    <div className="relative mb-4 flex w-full flex-wrap items-stretch">
-                        <div className="w-full p-3 text-left font-bold">BIRTH</div>
-                        <input
-                            name="birth"
-                            type="date"
-                            className="w-full p-3 rounded-r border border-solid border-neutral-500 shadow-md"
-                            onChange={handleChangeJoin}
-                        />
-                    </div>
-                </div>
-                <div className="flex justify-center">
-                    <div className="relative mb-4 flex w-full flex-wrap items-stretch">
-                        <div className="w-full p-3 text-left font-bold">Address</div>
-                        <input
-                            name="useraddress1"
-                            type="text"
-                            className="w-full p-3 rounded-r border border-solid border-neutral-500 shadow-md"
-                            onClick={handleAddressSearch}
-                            onChange={handleChangeJoin}
-                            value={joinParam.useraddress1}
-                        />
-                    </div>
-                </div>
-                <div className="flex justify-center">
-                    <div className="relative mb-4 flex w-full flex-wrap items-stretch">
-                        <div className="w-full p-3 text-left font-bold">Detail Address</div>
-                        <input
-                            name="useraddress2"
-                            type="text"
-                            className="w-full p-3 rounded-r border border-solid border-neutral-500 shadow-md"
-                            onChange={handleChangeJoin}
-                            value={joinParam.useraddress2}
-                        />
-                    </div>
-                </div>
-                <div className="flex justify-center">
-                    <div className="relative mb-4 flex w-full justify-center">
-                        <div className="w-2/5 p-6 flex justify-center font-bold">
-                            <button
-                                className="rounded p-4 w-36 mr-5 bg-blue-500 text-xl text-white"
-                                onClick={handleClickJoin}
-                            >
-                                JOIN
-                            </button>
-                            <button
-                                className="rounded p-4 w-36 ml-5 bg-blue-500 text-xl text-white"
-                                onClick={handleBackClick}
-                            >
-                                BACK
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div> */}
     </>
   );
 };

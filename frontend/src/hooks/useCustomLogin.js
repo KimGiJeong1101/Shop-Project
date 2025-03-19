@@ -7,21 +7,20 @@ import { cartState } from "../atoms/cartState";
 
 const useCustomLogin = () => {
   const navigate = useNavigate();
-
   const [loginState, setLoginState] = useRecoilState(signinState);
-
   const resetState = useResetRecoilState(signinState);
-
   const resetCartState = useResetRecoilState(cartState); //장바구니 비우기
-
   const isLogin = loginState.email ? true : false; //----------로그인 여부
 
   const doLogin = async (loginParam) => {
-    //----------로그인 함수
-
     const result = await loginPost(loginParam);
 
-    console.log(result);
+    console.log("💡 doLogin result:", result); // 결과 확인
+
+    if (!result) {
+      console.error("❌ 로그인 요청 결과가 없습니다.");
+      return null;
+    }
 
     saveAsCookie(result);
 
@@ -31,7 +30,15 @@ const useCustomLogin = () => {
   const saveAsCookie = (data) => {
     setCookie("member", JSON.stringify(data), 1); //1일
 
+    console.log("셋로그인스테이트 위위위" + setLoginState(data));
+
+    if (!data) {
+      console.error("로그인 데이터가 없습니다.");
+      return;
+    }
     setLoginState(data);
+
+    console.log("셋로그인스테이트 아래아래" + setLoginState(data));
   };
 
   const doLogout = () => {

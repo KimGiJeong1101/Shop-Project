@@ -28,6 +28,10 @@ public class APILoginFailHandler implements AuthenticationFailureHandler {
         Gson gson = new Gson();
 
         // JSON 문자열을 생성합니다. 로그인 오류 메시지를 포함합니다.
+        // frontend에서는 response.error 값을 조건문에서 활용할 수 있습니다.
+        // 예를 들어, response.error를 그대로 출력하면 "ERROR_LOGIN"이 표시되지만,
+        // 개발자가 원하는 메시지를 별도로 설정할 수도 있습니다.
+        // (예: if(response.error) { alert("로그인에 실패했습니다."); })
         String jsonStr = gson.toJson(Map.of("error", "ERROR_LOGIN"));
 
         // HTTP 응답의 Content-Type을 application/json으로 설정합니다.

@@ -6,15 +6,40 @@ import jwtAxios from "../util/jwtUtil";
 const host = `${API_SERVER_HOST}/api/member`;
 
 export const loginPost = async (loginParam) => {
+  console.log("🚨 로그인 시도 - 전달된 값 확인!");
+  console.log("📌 이메일:", loginParam.email);
+  console.log("📌 비밀번호:", loginParam.pw);
+
   const header = { headers: { "Content-Type": "x-www-form-urlencoded" } };
 
   const form = new FormData();
   form.append("username", loginParam.email);
   form.append("password", loginParam.pw);
 
-  const res = await axios.post(`${host}/login`, form, header);
+  // 🚀 FormData 확인 (빈 값이 있는지 확인)
+  console.log("📌 로그인 요청 데이터:");
+  console.log(" - 이메일:", loginParam.email);
+  console.log(" - 비밀번호:", loginParam.pw ? "입력됨" : "❌ 없음");
 
-  return res.data;
+  try {
+    const res = await axios.post(`${host}/login`, form, header);
+
+    console.log("✅ 로그인 응답:", JSON.stringify(res.data, null, 2));
+
+    return res.data; // 로그인 성공 시 데이터 반환
+  } catch (error) {
+    if (error.response) {
+      console.error("❌ 응답 에러:", error.response);
+      alert(error.response.data.error || "로그인 중 오류가 발생했습니다.");
+    } else if (error.request) {
+      console.error("❌ 요청 에러:", error.request);
+      alert("서버에 응답이 없습니다. 네트워크 상태를 확인해주세요.");
+    } else {
+      console.error("❌ 일반 에러:", error.message);
+      alert("알 수 없는 오류가 발생했습니다. 다시 시도해주세요.");
+    }
+    return null;
+  }
 };
 
 export const joinPost = async (joinParam) => {

@@ -32,9 +32,6 @@ import lombok.extern.log4j.Log4j2;
 @EnableMethodSecurity // 보안 설정 활성화를 위함이다 (시큐리티에서 실질적으로 중요함.)
 
 
-//
-
-
 @EnableGlobalMethodSecurity(prePostEnabled = true) // 권한별 보안을 설정해줄수 있게 해주는 어노테이션이다.
 // @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true) 이러한 문법들이 있다.
 // 우리 프로젝트에선 prePostEnabled = true 이걸 사용해서, @PreAuthorize("hasAnyRole('MANAGER','ADMIN')") 이런식으로 사용한다.
@@ -57,11 +54,23 @@ public class CustomSecurityConfig {
 
         http.csrf(config -> config.disable()); // csrf 토큰 사용?? 비활성화.
 
-        http.formLogin(config -> { // 로그인 처리 POST 방식
-            config.loginPage("/api/member/login"); // 로그인페이지 (기본페이지도 제공하지만, 지정해주면 그 페이지로 간다.)
-            config.successHandler(new APILoginSuccessHandler());
-            config.failureHandler(new APILoginFailHandler());
+        http.formLogin(config -> { // 로그인 처리 기본적으로 POST 방식
+            // 로그인 페이지 URL을 설정 (GET 요청과 POST 요청 모두 이 URL로 전송됨)
+            // GET 요청 시 로그인 페이지를 보여주고, POST 요청 시 로그인 정보를 처리함
+            // 즉, GET은 페이지를 보여주기 위한 요청, POST는 로그인 시도를 처리하는 요청임.
+            config.loginPage("/api/member/login"); // GET 요청 시 로그인 페이지를 보여주고, POST 요청 시 로그인 로직을 처리함.
+
+            // GET 요청 시 이 설정까지 진행되고, 로그인 페이지가 브라우저에 표시됨.
+
+            // POST 요청 시 로그인 로직이 진행되고, 그 후 성공/실패 핸들러로 넘어감.
+            // 로그인 성공 시 실행될 핸들러 설정
+            config.successHandler(new APILoginSuccessHandler()); // 로그인 성공 시 APILoginSuccessHandler 실행
+
+            // 로그인 실패 시 실행될 핸들러 설정
+            config.failureHandler(new APILoginFailHandler()); // 로그인 실패 시 APILoginFailHandler 실행
         });
+
+
 
 
         http.addFilterBefore(new JWTCheckFilter(), UsernamePasswordAuthenticationFilter.class); //JWT체크

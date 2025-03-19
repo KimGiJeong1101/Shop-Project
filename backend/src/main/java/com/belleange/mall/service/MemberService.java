@@ -2,6 +2,7 @@ package com.belleange.mall.service;
 
 
 import com.belleange.mall.domain.Member;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.belleange.mall.dto.MemberDTO;

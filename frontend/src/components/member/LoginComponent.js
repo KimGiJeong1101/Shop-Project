@@ -3,17 +3,17 @@ import useCustomLogin from "../../hooks/useCustomLogin";
 import { Link, useNavigate } from "react-router-dom";
 import KakaoLoginComponent from "./kakaoLoginComponent";
 
-console.log("------------------------------------");
-
 const initState = {
   email: "",
   pw: "",
   roleNames: [],
 };
 
-console.log("===========================");
 const LoginComponent = () => {
   const [loginParam, setLoginParam] = useState({ ...initState });
+
+  console.log(initState);
+  console.log(initState);
 
   const { doLogin, moveToPath } = useCustomLogin();
 
@@ -23,19 +23,35 @@ const LoginComponent = () => {
     setLoginParam((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault(); // 기본 이벤트를 방지합니다.
-    doLogin(loginParam) // loginSlice의 비동기 호출
-      .then((data) => {
-        console.log(data);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-        if (data.error) {
-          alert("이메일과 패스워드를 다시 확인하세요");
-        } else {
-          alert("로그인 성공");
-          moveToPath("/");
-        }
-      });
+    try {
+      const response = await doLogin(loginParam);
+
+      console.log("🚀 로그인 응답:", response);
+
+      // ✅ 응답 데이터 상세 확인
+      if (!response) {
+        console.log("❌ 서버 응답 없음!");
+        alert("서버 응답이 없습니다. 다시 시도해주세요.");
+        return;
+      }
+
+      if (response?.error) {
+        console.log("❌ 로그인 실패:", response?.error);
+        alert("사용자를 찾을 수 없습니다.");
+        moveToPath("/member/login");
+        return;
+      }
+
+      console.log("✅ 로그인 성공!");
+      alert("로그인 성공");
+      moveToPath("/");
+    } catch (error) {
+      console.error("❌ 로그인 중 오류 발생:", error);
+      alert("로그인 중 오류가 발생했습니다. 다시 시도해주세요.");
+    }
   };
 
   const handleClickJoin = () => {
@@ -98,7 +114,6 @@ const LoginComponent = () => {
                 type={"password"}
                 value={loginParam.pw}
                 onChange={handleChange}
-                required
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>

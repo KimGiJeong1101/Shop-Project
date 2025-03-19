@@ -5,6 +5,7 @@ import com.belleange.mall.dto.MemberDTO;
 import com.belleange.mall.dto.MemberModifyDTO;
 import com.belleange.mall.service.MemberService;
 import com.belleange.mall.util.JWTUtil;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -27,9 +28,8 @@ public class SocialController {
 
     @GetMapping("/api/member/kakao")
     public ResponseEntity<Map<String, Object>> getMemberFromKakao(String accessToken) {
-        log.info("Access Token: {}", accessToken);
-        MemberDTO memberDTO = memberService.getKakaoMember(accessToken);
 
+        MemberDTO memberDTO = memberService.getKakaoMember(accessToken);
 
         Map<String, Object> claims = memberDTO.getClaims();
 
@@ -43,13 +43,4 @@ public class SocialController {
     }
 
 
-    @PutMapping("/api/member/modify")
-    public Map<String, String> modify(@RequestBody MemberModifyDTO memberModifyDTO) {
-
-        log.info("====member modify=====:" + memberModifyDTO);
-
-        memberService.modifyMember(memberModifyDTO);
-
-        return Map.of("result", "modified");
-    }
 }

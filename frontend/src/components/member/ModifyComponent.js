@@ -93,8 +93,9 @@ const ModifyComponent = () => {
       alert("올바른 전화번호를 입력해주세요.");
       return;
     }
-    if (member.phone.length < 10) {
-      alert("전화번호는 10자리 이상이어야 합니다.");
+    if (member.phone.length < 10 || member.phone.length > 11) {
+      alert("전화번호는 10~11자리 숫자로 입력해주세요.");
+
       return;
     }
     if (!/^\d+$/.test(member.phone)) {

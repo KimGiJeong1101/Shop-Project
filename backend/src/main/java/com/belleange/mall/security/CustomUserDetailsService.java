@@ -23,18 +23,24 @@ import lombok.extern.log4j.Log4j2;
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
+
     private final MemberRepository memberRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        log.info("----------------loadUserByUsername-----------------------------");
+        log.info("🔹 이메일로 사용자 검색: {}", username);
+
 
         Member member = memberRepository.getWithRoles(username);
+
+        log.info("🔹 검색된 사용자 정보: {}", member);
+
 
         if (member == null) {
             throw new UsernameNotFoundException("Not Found"); // member에서 넘어오는 값이 없으면 예외처리
         }
+
 
         MemberDTO memberDTO = new MemberDTO( // 값을 DTO로 변환
                 member.getEmail(),
@@ -48,8 +54,6 @@ public class CustomUserDetailsService implements UserDetailsService {
                 member.getMemberRoleList()
                         .stream()
                         .map(memberRole -> memberRole.name()).collect(Collectors.toList()));
-
-        log.info(memberDTO);
 
         return memberDTO; // DTO로 반환
 
