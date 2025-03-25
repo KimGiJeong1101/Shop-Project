@@ -23,34 +23,34 @@ public class APILoginSuccessHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
 
-        // 인증된 MemberDTO 객체 가져오기
+        // Authentication 객체에서 Principal인 MemberDTO를 추출합니다.
         MemberDTO memberDTO = (MemberDTO) authentication.getPrincipal();
 
-
-        // 닉네임이 비어 있지 않다면, 토큰 생성 절차 진행
+        // MemberDTO에서 클레임(사용자 정보)을 가져옵니다.
         Map<String, Object> claims = memberDTO.getClaims();
 
-        // 토큰 생성
-        String accessToken = JWTUtil.generateToken(claims, 10);  // 10분 유효
-        String refreshToken = JWTUtil.generateToken(claims, 60 * 24);  // 24시간 유효
+        // accessToken과 refreshToken을 생성합니다. accessToken은 10분, refreshToken은 24시간 유효합니다.
+        String accessToken = JWTUtil.generateToken(claims, 10);
+        String refreshToken = JWTUtil.generateToken(claims, 60 * 24);
 
-        log.info("✔ 엑세스토큰 및 리프레시토큰 생성 완료");
-        log.debug("엑세스토큰: " + accessToken);
-        log.debug("리프레시토큰: " + refreshToken);
-
-        // 생성된 토큰을 클레임에 추가
+        // 클레임 맵에 accessToken과 refreshToken을 추가합니다.
         claims.put("accessToken", accessToken);
         claims.put("refreshToken", refreshToken);
 
-        // 토큰들을 응답으로 보내기 전에 로깅
-        log.info("✔ 응답 준비 완료 - 클레임 데이터 전송");
-
-        // 클레임을 JSON으로 변환하여 응답에 전달
+        // Gson 객체를 생성하여 클레임 맵을 JSON 문자열로 변환합니다.
         Gson gson = new Gson();
         String jsonStr = gson.toJson(claims);
+
+        // HTTP 응답의 Content-Type을 application/json으로 설정합니다.
         response.setContentType("application/json; charset=UTF-8");
+
+        // HTTP 응답으로 JSON 문자열을 보내기 위해 PrintWriter를 얻습니다.
         PrintWriter printWriter = response.getWriter();
+
+        // PrintWriter를 사용하여 JSON 문자열을 HTTP 응답에 기록합니다.
         printWriter.println(jsonStr);
+
+        // PrintWriter를 닫아서 자원을 반환합니다.
         printWriter.close();
     }
 
