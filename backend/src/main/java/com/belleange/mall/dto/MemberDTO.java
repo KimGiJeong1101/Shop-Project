@@ -17,28 +17,20 @@ import lombok.ToString;
 public class MemberDTO extends User {
 
     private String email;
-
     private String pw;
-
     private String nickname;
-
     private String phone;
-
     private String birth;
-
     private String useraddress;
-
     private String detailaddress;
-
     private boolean social;
-
     private List<String> roleNames = new ArrayList<>();
 
 
-    private boolean userExists; // 추가
-
 
     public MemberDTO(String email, String pw, String nickname, String phone, String birth, String useraddress, String detailaddress, boolean social, List<String> roleNames) {
+
+        // super는 회원가입 로직에서는 쓰이지 않음
         super(
                 email, pw, roleNames.stream().map(str -> new SimpleGrantedAuthority("ROLE_" + str)).collect(Collectors.toList())); // SimpleGrantedAuthority 권한을 나타낸단다.
 

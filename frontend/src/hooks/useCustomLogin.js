@@ -30,16 +30,15 @@ const useCustomLogin = () => {
   const saveAsCookie = (data) => {
     setCookie("member", JSON.stringify(data), 1); //1일
 
-    console.log("셋로그인스테이트 위위위" + setLoginState(data));
-
     if (!data) {
       console.error("로그인 데이터가 없습니다.");
       return;
     }
     setLoginState(data);
-
-    console.log("셋로그인스테이트 아래아래" + setLoginState(data));
   };
+
+  console.log(loginState); // loginState에 저장된 값 확인
+  console.log(loginState); // loginState에 저장된 값 확인
 
   const doLogout = () => {
     //---------------로그아웃 함수
@@ -73,7 +72,7 @@ const useCustomLogin = () => {
   };
 
   const moveToPath = (path) => {
-    //----------------페이지 이동
+    //----------------페이지 이동 (replace :true 옵션은 이동내역 덮어쓰기임. 뒤로가기 불가능하게끔 !)
     navigate({ pathname: path }, { replace: true });
   };
 

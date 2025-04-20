@@ -16,19 +16,12 @@ public class Member extends BaseEntity {
 
     @Id
     private String email;
-
     private String pw;
-
     private String nickname;
-
     private String phone;
-
     private String birth;
-
     private String useraddress;
-
     private String detailaddress;
-
     private boolean social; // 소셜로그인 여부 체크를 위한 컬럼
 
     @ElementCollection(fetch = FetchType.LAZY)
@@ -45,6 +38,8 @@ public class Member extends BaseEntity {
         memberRoleList.clear();
     }
 
+
+    // change 메서드들은 수정 로직에 사용 됨 .
 
     public void changeNickname(String nickname) {
         this.nickname = nickname;

@@ -42,46 +42,79 @@ public class CustomSecurityConfig {
 
     // 따로 보안 설정을 안해주면, 기본적으로는 전부 허용을 안해준다고 한다. 그니깐, 보안이 좋다는 얘기다.
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception { // HTTP 보안 설정을 커스터마이징 위함. (체이닝)
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         log.info("---------------------security config---------------------------");
 
-        http.cors(httpSecurityCorsConfigurer -> {
-            httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource());
-        }); // 밑에 정의해놓은 정책대로 허용할거다. 지금 이 메서드에서 사용하지 않으면 밑에 있는 내용 쓸모가없다.
+        // 1. CORS 설정 (가장 먼저, 외부 요청 허용할지 정함)
+        http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
 
-        http.sessionManagement(sessionConfig -> sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // 세션 허용 여부인데, .STATELESS 이건 세션 사용 안한다는 얘기다.
+        // 2. 세션 설정 - 우리는 JWT 방식이라 세션 안씀!
+        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-        http.csrf(config -> config.disable()); // csrf 토큰 사용?? 비활성화.
+        // 3. CSRF 보안은 비활성화 (JWT 사용 시 일반적으로 disable)
+        http.csrf(csrf -> csrf.disable());
 
-        http.formLogin(config -> { // 로그인 처리 기본적으로 POST 방식
-            // 로그인 페이지 URL을 설정 (GET 요청과 POST 요청 모두 이 URL로 전송됨)
-            // GET 요청 시 로그인 페이지를 보여주고, POST 요청 시 로그인 정보를 처리함
-            // 즉, GET은 페이지를 보여주기 위한 요청, POST는 로그인 시도를 처리하는 요청임.
-            config.loginPage("/api/member/login"); // GET 요청 시 로그인 페이지를 보여주고, POST 요청 시 로그인 로직을 처리함.
+        // 4. JWT 토큰 검사 필터 - 로그인 이후 요청부터 검사
+        http.addFilterBefore(new JWTCheckFilter(), UsernamePasswordAuthenticationFilter.class);
 
-            // GET 요청 시 이 설정까지 진행되고, 로그인 페이지가 브라우저에 표시됨.
-
-            // POST 요청 시 로그인 로직이 진행되고, 그 후 성공/실패 핸들러로 넘어감.
-            // 로그인 성공 시 실행될 핸들러 설정
-            config.successHandler(new APILoginSuccessHandler()); // 로그인 성공 시 APILoginSuccessHandler 실행
-
-            // 로그인 실패 시 실행될 핸들러 설정
-            config.failureHandler(new APILoginFailHandler()); // 로그인 실패 시 APILoginFailHandler 실행
+        // 5. 로그인 설정 (아이디/비번 인증용)
+        http.formLogin(form -> {
+            form.loginPage("/api/member/login"); // 프론트에서 보내는 로그인 요청 URL
+            form.successHandler(new APILoginSuccessHandler()); // 로그인 성공 시 로직
+            form.failureHandler(new APILoginFailHandler());     // 로그인 실패 시 로직
         });
 
-
-
-
-        http.addFilterBefore(new JWTCheckFilter(), UsernamePasswordAuthenticationFilter.class); //JWT체크
-
-        http.exceptionHandling(config -> {
-            config.accessDeniedHandler(new CustomAccessDeniedHandler());
+        // 6. 권한/인가 실패 처리 핸들러
+        http.exceptionHandling(exception -> {
+            exception.accessDeniedHandler(new CustomAccessDeniedHandler());
         });
-
 
         return http.build();
     }
+
+
+//    @Bean
+//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception { // HTTP 보안 설정을 커스터마이징 위함. (체이닝)
+//
+//        log.info("---------------------security config---------------------------");
+//
+//        http.cors(httpSecurityCorsConfigurer -> {
+//            httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource());
+//        }); // 밑에 정의해놓은 정책대로 허용할거다. 지금 이 메서드에서 사용하지 않으면 밑에 있는 내용 쓸모가없다.
+//
+//        http.sessionManagement(sessionConfig -> sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // 세션 허용 여부인데, .STATELESS 이건 세션 사용 안한다는 얘기다.
+//
+//        http.csrf(config -> config.disable()); // csrf 토큰 사용?? 비활성화.
+//
+//        http.formLogin(config -> { // 로그인 처리 기본적으로 POST 방식
+//            // 로그인 페이지 URL을 설정 (GET 요청과 POST 요청 모두 이 URL로 전송됨)
+//            // GET 요청 시 로그인 페이지를 보여주고, POST 요청 시 로그인 정보를 처리함
+//            // 즉, GET은 페이지를 보여주기 위한 요청, POST는 로그인 시도를 처리하는 요청임.
+//            config.loginPage("/api/member/login"); // GET 요청 시 로그인 페이지를 보여주고, POST 요청 시 로그인 로직을 처리함.
+//
+//            // GET 요청 시 이 설정까지 진행되고, 로그인 페이지가 브라우저에 표시됨.
+//
+//            // POST 요청 시 로그인 로직이 진행되고, 그 후 성공/실패 핸들러로 넘어감.
+//            // 로그인 성공 시 실행될 핸들러 설정
+//            config.successHandler(new APILoginSuccessHandler()); // 로그인 성공 시 APILoginSuccessHandler 실행
+//
+//            // 로그인 실패 시 실행될 핸들러 설정
+//            config.failureHandler(new APILoginFailHandler()); // 로그인 실패 시 APILoginFailHandler 실행
+//        });
+//
+//
+//
+//
+//        http.addFilterBefore(new JWTCheckFilter(), UsernamePasswordAuthenticationFilter.class); //JWT체크
+//
+//        http.exceptionHandling(config -> {
+//            config.accessDeniedHandler(new CustomAccessDeniedHandler());
+//        });
+//
+//
+//        return http.build();
+//    }
 
 
     @Bean

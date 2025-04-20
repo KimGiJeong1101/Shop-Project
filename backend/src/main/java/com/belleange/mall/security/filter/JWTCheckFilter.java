@@ -212,12 +212,12 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             // "Bearer " 다음의 문자열을 추출하여 access token을 얻음
             String accessToken = authHeaderStr.substring(7);
 
-            // JWTUtil을 사용하여 access token의 유효성을 검사하고, 토큰에 포함된 클레임(claim)들을 가져옴
+            // JWTUtil을 사용하여 access token의 유효성을 검사하고, 토큰에 포함된 클레임(claim)들을 가져옴 (JSON 형식으로)
             Map<String, Object> claims = JWTUtil.validateToken(accessToken);
 
             log.info("JWT claims: " + claims);
 
-            // 클레임에서 사용자 정보 추출
+            // 클레임에서 사용자 정보 추출 (JSON 형식을 DTO 타입으로 변환하기 위함. 아직은 변환되지 않은 상태)
             String email = (String) claims.get("email");
             String pw = (String) claims.get("pw");
             String nickname = (String) claims.get("nickname");
@@ -235,15 +235,16 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             log.info(memberDTO);
             log.info(memberDTO.getAuthorities());
 
-            // Spring Security를 사용하여 인증 토큰(UsernamePasswordAuthenticationToken) 생성
+            // 인증된 사용자 정보를 담은 토큰 만들기 (스프링 시큐리티가 이해할 수 있는 형식으로!)
             UsernamePasswordAuthenticationToken authenticationToken
                     = new UsernamePasswordAuthenticationToken(memberDTO, pw, memberDTO.getAuthorities());
 
-            // SecurityContextHolder를 사용하여 현재 사용자의 인증 정보 설정
+            // "이 사람 로그인 됐어!" 라고 시큐리티 컨텍스트에 등록해주기
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
-            // 다음 필터로 요청과 응답을 전달
+            // 이제 우리 할 일 끝! 다음 필터로 넘겨주기
             filterChain.doFilter(request, response);
+
 
         } catch (Exception e) {
             // 예외 발생 시 처리

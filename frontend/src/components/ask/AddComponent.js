@@ -24,17 +24,11 @@ const AddComponent = () => {
   });
 
   const [result, setResult] = useState(null); //결과 상태
-
   const { moveToList } = useCustomMove(); //useCustomMove 활용
-
   const [titleMsg, setTitleMsg] = useState(null);
-
   const [textMsg, setTextMsg] = useState(null);
-
   const [writerMsg, setWriterMsg] = useState(null);
-
   const [errorMsg, setErrorMsg] = useState(null);
-
   const handleChangeAsk = (e) => {
     ask[e.target.name] = e.target.value;
 

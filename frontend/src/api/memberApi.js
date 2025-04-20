@@ -6,18 +6,20 @@ import jwtAxios from "../util/jwtUtil";
 const host = `${API_SERVER_HOST}/api/member`;
 
 export const loginPost = async (loginParam) => {
+  const header = { headers: { "Content-Type": "x-www-form-urlencoded" } };
 
-  const header = {headers: {"Content-Type": "x-www-form-urlencoded"}}
+  const form = new FormData();
+  form.append("username", loginParam.email);
+  form.append("password", loginParam.pw);
 
-  const form = new FormData()
-  form.append('username', loginParam.email)
-  form.append('password', loginParam.pw)
+  const res = await axios.post(`${host}/login`, form, header);
 
-  const res = await axios.post(`${host}/login`, form, header)
+  console.log("로그인 하면서 백엔드에서 넘어온거");
+  console.log(res.data);
+  console.log("로그인 하면서 백엔드에서 넘어온거");
 
-  return res.data
-
-}
+  return res.data;
+};
 
 export const joinPost = async (joinParam) => {
   try {
@@ -26,6 +28,16 @@ export const joinPost = async (joinParam) => {
         "Content-Type": "application/json",
       },
     });
+
+    console.log("데이터 확인");
+    console.log("데이터 확인");
+
+    console.log(res.data);
+    console.log(res.data.result);
+
+    console.log("데이터 확인");
+    console.log("데이터 확인");
+
     return res.data;
   } catch (error) {
     console.error("Error during the join request:", error);

@@ -36,8 +36,14 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public String join(MemberDTO memberDTO) {
+
+        // 우리가 지금까지 들고 다니던 DTO를 엔티티로 바꿔줄 거야!
+        // dtoToEntity() 메서드를 호출하면 Member 타입으로 바뀐 값이 리턴되니까,
+        // 그걸 member라는 변수에 담아놓은 거야!
         Member member = dtoToEntity(memberDTO);
 
+        // result에 무조건 저장안하고, memberRepository.save(member); 이렇게만 선언해주어도 됨.
+        // 하지만 그랬을때, 그에 맞게 return을 해줘야함. 없애던가 변경하던가
         Member result = memberRepository.save(member);
         log.info("==============서비스임플입니다 지나가는지 테스트중 22222222222222222==========");
         return result.getEmail();
@@ -157,6 +163,9 @@ public class MemberServiceImpl implements MemberService {
 
 
     private Member dtoToEntity(MemberDTO memberDTO) {
+        // DTO를 Entity로 변환하는 과정
+        // → Entity는 JPA가 인식할 수 있는 형태이며, DB 테이블과 직접 매핑됨
+        // → 즉, DB에 저장하려면 DTO → Entity 변환이 반드시 필요함
         Member member = Member.builder()
                 .email(memberDTO.getEmail())
                 .pw(passwordEncoder.encode(memberDTO.getPw()))

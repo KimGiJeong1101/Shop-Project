@@ -10,27 +10,34 @@ const initState = {
 };
 
 const LoginComponent = () => {
+  // 로그인 정보를 담기 위한 변수
   const [loginParam, setLoginParam] = useState({ ...initState });
 
   console.log(initState);
-  console.log(initState);
 
+  // 커스텀 훅에서 로그인 처리 및 페이지 이동 함수를 꺼내옴.
   const { doLogin, moveToPath } = useCustomLogin();
 
+  // 리액트에서 제공하는?? 기능으로 url이나 페이지?? 이동을 위해 사용
   const navigate = useNavigate();
 
+  // 이건 회원가입 로직이랑 거의 비슷함. 입력란의 정보를 계속 최신화?? 하기 위함
   const handleChange = (e) => {
     setLoginParam((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  // 해당 컴포넌트에서 사실상 가장 중요한 함수
   const handleSubmit = async (e) => {
+    // form의 기본 동작(새로고침/서버 전송)을 막고, JS 함수만 실행되도록 함
     e.preventDefault();
 
     try {
+      // 여기서 doLogin 함수를 호출하면서 거기에 로그인 정보를 담아서 보냄.
       const response = await doLogin(loginParam);
 
       console.log("🚀 로그인 응답:", response);
 
+      // 전체적으로 보자면, 서버에서 응답이 없거나, 있거나에 대한 로직을 처리함
       // ✅ 응답 데이터 상세 확인
       if (!response) {
         console.log("❌ 서버 응답 없음!");
@@ -54,6 +61,7 @@ const LoginComponent = () => {
     }
   };
 
+  // 이건 회원가입 버튼에 대한 로직. 단순이 회원가입 페이지로 이동을 도와줌.
   const handleClickJoin = () => {
     navigate("/member/join"); // JOIN 페이지로 이동
   };

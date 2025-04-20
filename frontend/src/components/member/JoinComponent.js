@@ -31,7 +31,7 @@ const JoinComponent = () => {
   const navigate = useNavigate();
 
   const handleAddressSearch = () => {
-    new window.daum.Postcode({
+    new window.daum.Postcode({ // 카카오API 문법
       oncomplete: function (data) {
         // 주소 입력 처리
         setJoinParam((prevState) => ({
@@ -39,21 +39,26 @@ const JoinComponent = () => {
           useraddress: data.address, // 카카오 API에서 반환된 주소를 useraddress1으로 설정
         }));
         // 상세 주소 입력란에 자동 포커싱
-        document.querySelector("input[name='detailaddress']").focus();
+        document.querySelector("input[name='detailaddress']").focus(); // 자바스크립트 문법을 사용한 이유는 카카오API가 자바스크립트문법으로 실행되기 때문
       },
     }).open();
   };
+
   const handleChangeJoin = (e) => {
+    // 이벤트가 발생한 input 요소에서 name 속성과 입력된 value 값을 꺼낸다
     let { name, value } = e.target;
 
+    // name이 "birth"이고, 값이 존재할 경우 (둘 다 만족해야 함)
     if (name === "birth" && value) {
       // 날짜 데이터의 '-'를 제거하여 YYYYMMDD 형태로 변환
       value = value.split("-").join("");
     }
 
+    // 기존 상태(prevState)를 복사해 새로운 객체를 만들고,
+    // name에 해당하는 항목만 새 값(value)으로 덮어써 업데이트함
+    // 그렇게 만들어진 updatedValues를 리턴하여 상태를 업데이트함
     setJoinParam((prevState) => {
       let updatedValues = { ...prevState, [name]: value };
-
       return updatedValues;
     });
   };
@@ -293,6 +298,7 @@ const JoinComponent = () => {
                   type="text"
                   onClick={handleAddressSearch}
                   onChange={handleChangeJoin}
+                  // 다른 input과 다르게 value={joinParam.useraddress} 이렇게 표현햇는데, 원래 로직이 기본과 상세 주소를 front에서 가공해서 사용하려 했기때문에 이런 문법이 필요했다.
                   value={joinParam.useraddress}
                   className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
@@ -310,7 +316,8 @@ const JoinComponent = () => {
                   name="detailaddress"
                   type="text"
                   onChange={handleChangeJoin}
-                  value={joinParam.detailaddress}
+                  // 위에서 말했듯이 원래 하려던 가공 로직이 사라져 이렇게 주석처리해도 문제가 없다
+                  // value={joinParam.detailaddress}
                   className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
